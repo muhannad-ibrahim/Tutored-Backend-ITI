@@ -43,7 +43,23 @@ public function deleteResponse(){
 }
 
 
+public function notFoundResponse(){
+    return $this->apiResponse(null, 'not found !', 404);
+}
 
+public function unKnowError(){
+    return $this->apiResponse(null, 'Un know error', 520);
+}
+
+public function apiValidation($request, $array){
+
+    $validate = Validator::make($request->all() , $array);
+
+    if($validate->fails()){
+        return $this->apiResponse(null, $validate->errors(), 422);
+    }
+
+}
 
 
 
