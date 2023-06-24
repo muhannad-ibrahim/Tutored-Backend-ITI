@@ -34,6 +34,15 @@ public function successCode(){
     ];
 }
 
+public function createdResponse($data){
+    return $this->apiResponse($data, null, 201);
+}
+
+public function deleteResponse(){
+    return $this->apiResponse(true, null, 200);
+}
+
+
 
 
 
