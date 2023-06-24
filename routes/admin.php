@@ -12,6 +12,6 @@ use App\Http\Controllers\ContactUsController;
 | Here is where you can register Admin routes for your application.
 */
 
-Route::get('/Contact_us', [ContactUsController::class, 'index']);
-Route::get('/Contact_us/{id}', [ContactUsController::class, 'show']);
-Route::delete('/Contact_us/{id}', [ContactUsController::class, 'destroy']);
+Route::get('/contact_us', [ContactUsController::class, 'index']);
+Route::get('/contact_us/{id}', [ContactUsController::class, 'show']);
+Route::delete('/contact_us/{id}', [ContactUsController::class, 'destroy']);
