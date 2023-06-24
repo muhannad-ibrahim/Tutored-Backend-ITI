@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
@@ -19,4 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/Contact_us', [ContactUsController::class, 'store']);
+//login and register Admin
+Route::post('login', [AuthController::class, 'login']);
+
+Route::post('/contact_us', [ContactUsController::class, 'store']);

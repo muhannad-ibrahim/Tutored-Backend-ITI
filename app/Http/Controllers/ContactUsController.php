@@ -6,6 +6,7 @@ use App\Http\Traits\ApiResponseTrait;
 use App\Models\ContactUs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ContactUsController extends Controller
 {
@@ -17,18 +18,7 @@ class ContactUsController extends Controller
     public function index()
     {
         $contactUs = ContactUs::all();
-        dd('fsfsf');
         return response()->json($contactUs, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -39,7 +29,21 @@ class ContactUsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $this->validateStoreRequest($request);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+    
+        $contactUs = ContactUs::create([
+            'email' => $request->email,
+            'name' => $request->name,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ]);
+        if (is_null($contactUs)) {
+            return response()->json("Cannot store this message", 400);
+        }
+        return response()->json($contactUs, 201);
     }
 
     /**
@@ -48,32 +52,13 @@ class ContactUsController extends Controller
      * @param  \App\Models\ContactUs  $contactUs
      * @return \Illuminate\Http\Response
      */
-    public function show(ContactUs $contactUs)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ContactUs  $contactUs
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ContactUs $contactUs)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContactUs  $contactUs
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ContactUs $contactUs)
-    {
-        //
+        $contactUs = ContactUs::find($id);
+        if (is_null($contactUs)) {
+            return response()->json("Contact us not found", 404);
+        }
+        return response()->json($contactUs, 200);
     }
 
     /**
@@ -82,8 +67,31 @@ class ContactUsController extends Controller
      * @param  \App\Models\ContactUs  $contactUs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ContactUs $contactUs)
+    public function destroy($id)
     {
-        //
+        $contactUs = ContactUs::find($id);
+        if (is_null($contactUs)) {
+            return response()->json("Contact us not found", 404);
+        }
+        $contactUs->delete();
+        return response()->json(null, 204);
+    }
+
+    /**
+     * Validate the incoming request for the store method.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    private function validateStoreRequest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'name' => 'required|min:3|max:20',
+            'subject' => 'required|min:5|max:50',
+            'message' => 'required|min:10|max:191',
+        ]);
+    
+        return $validator;
     }
 }
