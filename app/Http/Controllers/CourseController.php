@@ -201,7 +201,36 @@ class CourseController extends Controller
     }
 
 
-    
+    public function course_student_enroll(Request $request){
+
+        $course_id=$request->course_id;
+        $student_id=$request->student_id;
+
+        $status=DB::select("select * from course_student where course_id = $course_id and student_id = $student_id");
+        if ($status) {
+            return response()->json($status, 200);
+        }
+        else{
+        return response()->json("Not Found", 404);
+        }
+     }
+
+
+
+     public function getCount()
+     {
+         $data = DB::table('courses')->select('id')->count('id');
+         if ($data == 0)
+             return response()->json($data, 200);
+         if ($data) {
+             return response()->json($data, 200);
+         }
+         return response()->json("Not Found", 404);
+     }
+
+     
+
+
 
 
 
