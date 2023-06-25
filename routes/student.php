@@ -5,6 +5,7 @@ use App\Http\Controllers\payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CategoryController;
 
 
 Route::get('/students',[StudentController::class, 'index']);

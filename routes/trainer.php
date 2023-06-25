@@ -4,6 +4,7 @@ use App\Http\Controllers\TrainerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CategoryController;
 
 
 Route::get('/trainers', [TrainerController::class, 'index']);
