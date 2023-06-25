@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContactUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,6 @@ use Illuminate\Support\Facades\Route;
 
 //login Admin
 Route::post('login', [AuthController::class, 'login']);
-
-
-
-
 
 //get categories
 Route::get('/categories', [CategoryController::class, 'index']);
@@ -61,12 +58,11 @@ Route::middleware('checkTrainer:trainers')->group(function () {
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
 
-
-
-
 //get courses count
 Route::get('/courses/count',[CourseController::class,'getCount']);
 Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
 Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);
+
+Route::post('/contact_us', [ContactUsController::class, 'store']);
