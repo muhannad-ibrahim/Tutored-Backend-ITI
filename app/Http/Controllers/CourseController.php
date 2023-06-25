@@ -242,7 +242,35 @@ class CourseController extends Controller
             //$query->get();
             return response()->json($query->get());
         }
-        
+
+
+
+
+    public function Enrollment(Request $request)
+    {
+        $enrolle = DB::table('course_student')->insert([
+            'student_id' => $request->student_id,
+            'course_id' => $request->course_id,
+        ]);
+
+        $course=Course::find($request->course_id);
+        $course_name=$course->name;
+        if ($enrolle) {
+            // $course= DB::select("select name from courses where id = $request->course_id");
+            $details = [
+                'title' => 'Congratulations',
+                'body' => "You have enrolled successfully $course_name ",
+            ];
+
+            $email = DB::select("select email from students where id = $request->student_id");
+
+            Mail::to($email)->send(new welcomemail($details));
+
+            return response()->json($enrolle, 200);
+        }
+
+        return response()->json("Cannot add this course", 400);
+    }
 
 
 
