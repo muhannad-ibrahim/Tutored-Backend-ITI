@@ -31,7 +31,12 @@ class Course extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class);
+    }
     
-
-
 }
