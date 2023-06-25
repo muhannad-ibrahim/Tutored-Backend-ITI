@@ -114,6 +114,24 @@ class CategoryController extends Controller
         return $this->notFoundResponse();
     }
 
+
+    public function getCount()
+    {
+        $data = DB::table('categories')->select('id')->count('id');
+        if ($data == 0)
+            return response()->json($data, 200);
+        if ($data) {
+            return response()->json($data, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
+
+
+    
+
+
+
+
     public function validation($request)
     {
         return $this->apiValidation($request, [

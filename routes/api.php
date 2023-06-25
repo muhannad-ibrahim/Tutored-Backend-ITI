@@ -27,5 +27,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('/categories', [CategoryController::class, 'index']);
 //get categories by id
 Route::get('/categories/{id}', [CategoryController::class, 'show']);
-
+//get categories count
+Route::get('/categories/count',[CategoryController::class,'getCount']);
 
