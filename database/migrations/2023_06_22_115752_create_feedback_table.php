@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('desc');
+            $table->string('review')->nullable();
+            $table->integer('rating');
             $table->foreignId('student_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
 

@@ -41,6 +41,8 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/student/logout', [StudentController::class, 'logout']);
     Route::post('/student/hello', [StudentController::class, 'sayHello']);
     Route::post('/students/{id}',[StudentController::class, 'update']);
+    Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
+    Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);
@@ -65,4 +67,10 @@ Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
 Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);
 
+Route::middleware('studentOrAdmin:students,api')->group(function () {
+    Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
+});
+
 Route::post('/contact_us', [ContactUsController::class, 'store']);
+
+Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);

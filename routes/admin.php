@@ -29,3 +29,6 @@ Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 Route::get('/contact_us', [ContactUsController::class, 'index']);
 Route::get('/contact_us/{id}', [ContactUsController::class, 'show']);
 Route::delete('/contact_us/{id}', [ContactUsController::class, 'destroy']);
+
+Route::get('/courses/feedbacks', [FeedbackController::class, 'index']);
+
