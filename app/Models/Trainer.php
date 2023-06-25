@@ -20,6 +20,17 @@ class Trainer extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+
+      /**
+     * Get the courses for this trainer.
+     */
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
+    
+
     /**
     * The attributes that should be cast.
     *

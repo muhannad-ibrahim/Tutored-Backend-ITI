@@ -24,5 +24,14 @@ class Course extends Model
     }
 
 
+     /**
+     * Get the trainer that teaches this course.
+     */
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
+    }
+    
+
 
 }
