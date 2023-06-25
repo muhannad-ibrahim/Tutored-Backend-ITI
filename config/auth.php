@@ -51,13 +51,11 @@ return [
             'driver' => 'jwt',
             'provider' => 'students',
         ],
-        'triners' => [
+
+        'trainers' => [
             'driver' => 'jwt',
-            'provider' => 'triners',
+            'provider' => 'trainers',
         ],
-
-
-
     ],
 
     /*
@@ -93,7 +91,7 @@ return [
             'model' => App\Models\Student::class,
         ],
 
-        'triners' => [
+        'trainers' => [
             'driver' => 'eloquent',
             'model' => App\Models\Trainer::class,
         ],

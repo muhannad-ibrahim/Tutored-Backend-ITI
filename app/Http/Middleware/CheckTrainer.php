@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-
-class checkStudent
+class checkTrainer
 {
     /**
      * Handle an incoming request.
@@ -24,7 +22,7 @@ class checkStudent
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::guard('students')->check()) {
+        if(Auth::guard('trainers')->check()) {
             try {
                 JWTAuth::parseToken()->authenticate();
             } catch (Exception $exception) {
