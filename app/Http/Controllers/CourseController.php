@@ -20,6 +20,37 @@ class CourseController extends Controller
 
 
 
+    public function store(Request $request)
+    {
+
+        $validation = $this->validation($request);
+        if ($validation instanceof Response) {
+            return $validation;
+        }
+
+        // $img = $request->file('img');
+        // $ext = $img->getClientOriginalExtension();
+        // $image = "course -" . uniqid() . ".$ext";
+        // $img->move(public_path("uploads/courses/"), $image);
+        $image = cloudinary()->upload($request->file('img')->getRealPath())->getSecurePath();
+
+        $course = Course::create([
+            'name' => $request->name,
+            'img' => $image,
+            'category_id' => $request->category_id,
+            'trainer_id' => $request->trainer_id,
+            'price' => $request->price,
+            'duration' => $request->duration,
+            'preq' => $request->preq,
+            'desc' => $request->desc,
+        ]);
+
+        if ($course) {
+            return response()->json($course, 200);
+        }
+
+        return response()->json("Cannot add this course", 400);
+    }
 
 
 

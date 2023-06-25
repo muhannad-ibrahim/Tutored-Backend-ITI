@@ -17,3 +17,8 @@ Route::post('/categories', [CategoryController::class, 'store'])->middleware(['c
 Route::post('/categories/{id}',[CategoryController::class, 'update']);
 Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 
+Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::post('/Contact_us', [ContactUsController::class, 'store']);
