@@ -57,7 +57,44 @@ class CategoryController extends Controller
         return response()->json("Cannot send this message", 400);
     }
 
+    public function update($id, Request $request)
+    {
 
+        $validation = $this->apiValidation($request, [
+            'name' => 'required|min:3|max:30',
+            'img' => 'image|mimes:jpg,jpeg,png',
+        ]);
+        if ($validation instanceof Response) {
+            return $validation;
+        }
+
+
+
+        $Category = Category::find($id);
+        if (!$Category) {
+            return $this->notFoundResponse();
+        }
+        $image = $Category->img;
+        if ($request->hasFile('img')) {
+            if ($image !== null) {
+                $path_parts = pathinfo(basename($image));
+
+                Cloudinary::destroy($path_parts['filename']);
+            }
+            $image = Cloudinary::upload($request->file('img')->getRealPath())->getSecurePath();
+
+        }
+
+        $Category->update([
+            'name' => $request->name,
+            'img' => $image,
+        ]);
+
+        if ($Category) {
+            return $this->apiResponse($Category);
+        }
+        $this->unKnowError();
+    }
 
 
 
