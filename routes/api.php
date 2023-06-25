@@ -36,3 +36,5 @@ Route::middleware('checkStudent:students')->group(function () {
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
+
+Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);

@@ -70,9 +70,13 @@ class FeedbackController extends Controller
      * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function show(Feedback $feedback)
+    public function show(Course $course)
     {
-        //
+        $feedbacks = $course->feedbacks;
+        return response()->json([
+            'message' => 'Feedbacks retrieved successfully for the course.',
+            'feedbacks' => $feedbacks,
+        ], 200);
     }
 
     /**

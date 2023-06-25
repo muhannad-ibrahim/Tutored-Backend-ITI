@@ -13,5 +13,8 @@ class Course extends Model
 
     protected $fillable = ['name', 'img', 'price', 'duration', 'desc', 'preq', 'trainer_id', 'category_id'];
 
-
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }
