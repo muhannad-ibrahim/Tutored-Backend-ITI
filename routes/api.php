@@ -33,6 +33,12 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/student/logout', [StudentController::class, 'logout']);
     Route::post('/student/hello', [StudentController::class, 'sayHello']);
     Route::post('/students/{id}',[StudentController::class, 'update']);
+    Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
+    Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
+});
+
+Route::middleware('studentOrAdmin:students,api')->group(function () {
+    Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);

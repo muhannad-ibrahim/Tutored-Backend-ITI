@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -20,16 +21,6 @@ class FeedbackController extends Controller
             'message' => 'All feedbacks retrieved successfully.',
             'feedbacks' => $feedbacks,
         ], 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -80,17 +71,6 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Feedback $feedback)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -124,8 +104,17 @@ class FeedbackController extends Controller
      * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
-    {
-        //
+    public function destroy(Request $request, $courseId, $feedbackId)
+    {   
+        $feedback =  Feedback::find($feedbackId);
+        if (is_null($feedback)) {
+            return response()->json("Feedback not found", 404);
+        }
+
+        // Check if the current user is an admin
+        if (Auth::user()->isAdmin()) {
+        $feedback->delete();
+        return response()->json(['message' => 'Feedback deleted successfully.'], 200);
+    }
     }
 }
