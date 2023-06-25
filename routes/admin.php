@@ -10,3 +10,10 @@ Route::post('refresh', [AuthController::class, 'refresh']);
 Route::post('me', [AuthController::class, 'me']);
 
 Route::get('/admins', [AuthController::class,'index']);
+
+
+
+Route::post('/categories', [CategoryController::class, 'store'])->middleware(['cors']);
+Route::post('/categories/{id}',[CategoryController::class, 'update']);
+Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
+

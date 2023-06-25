@@ -18,3 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 //login and register Admin
 Route::post('login', [AuthController::class, 'login']);
+
+
+
+
+
+//get categories
+Route::get('/categories', [CategoryController::class, 'index']);
+//get categories by id
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+
+
