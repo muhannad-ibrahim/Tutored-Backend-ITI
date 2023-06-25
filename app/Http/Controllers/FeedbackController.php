@@ -15,7 +15,11 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        //
+        $feedbacks = Feedback::all();
+        return response()->json([
+            'message' => 'All feedbacks retrieved successfully.',
+            'feedbacks' => $feedbacks,
+        ], 200);
     }
 
     /**
