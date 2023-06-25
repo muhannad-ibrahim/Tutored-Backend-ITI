@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 //login and register Admin
 Route::post('login', [AuthController::class, 'login']);
+
+
+// routes for student
+Route::post('/student/register',[StudentController::class,'register']);
+Route::post('/student/login', [StudentController::class, 'login']);
+Route::middleware('checkStudent:students')->group(function () {
+    Route::post('/student/me', [StudentController::class, 'me']);
+    Route::post('/student/logout', [StudentController::class, 'logout']);
+    Route::post('/student/hello', [StudentController::class, 'sayHello']);
+    Route::post('/students/{id}',[StudentController::class, 'update']);
+});
