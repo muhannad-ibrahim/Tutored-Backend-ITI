@@ -98,7 +98,21 @@ class CategoryController extends Controller
 
 
 
+    public function delete($id)
+    {
+        $Category = Category::find($id);
+        if ($Category) {
+            $img_name = $Category->img;
+        if ($img_name !== null) {
+            $path_parts = pathinfo(basename($img_name));
 
+            Cloudinary::destroy($path_parts['filename']);
+        }
+            $Category->delete();
+            return $this->deleteResponse();
+        }
+        return $this->notFoundResponse();
+    }
 
     public function validation($request)
     {
