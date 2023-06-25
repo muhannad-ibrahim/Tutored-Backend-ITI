@@ -9,3 +9,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/students',[StudentController::class, 'index']);
 Route::get('/students/{id}',[StudentController::class, 'show']);
+
+Route::post('/courses/{course}/feedback', [FeedbackController::class, 'store']);
