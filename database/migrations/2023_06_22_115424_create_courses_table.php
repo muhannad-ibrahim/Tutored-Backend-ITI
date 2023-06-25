@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('duration');
             $table->string('preq');
             $table->text('desc');
+            $table->float('average_rating', 8, 2)->nullable();
+
             $table->foreignId('trainer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
 
