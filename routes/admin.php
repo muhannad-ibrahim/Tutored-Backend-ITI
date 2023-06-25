@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CourseController;
+
 
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('refresh', [AuthController::class, 'refresh']);
@@ -19,6 +21,4 @@ Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 
 Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 
-Route::get('/courses', [CourseController::class, 'index']);
-Route::get('/courses/{id}', [CourseController::class, 'show']);
-Route::post('/Contact_us', [ContactUsController::class, 'store']);
+

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TrainerController;
+use App\Http\Controllers\CourseController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,3 +59,13 @@ Route::middleware('checkTrainer:trainers')->group(function () {
 });
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
+
+
+
+
+//get courses count
+Route::get('/courses/count',[CourseController::class,'getCount']);
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
+Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);

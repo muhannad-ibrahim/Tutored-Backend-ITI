@@ -4,7 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ApiResponseTrait;
 use App\Models\Course;
+use App\Models\Course_Content;
+use App\Models\Student;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use App\Mail\welcomemail;
+use Illuminate\Support\Facades\Mail;
 
+use Illuminate\Support\Facades\Log;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class CourseController extends Controller
 {
@@ -142,6 +151,15 @@ class CourseController extends Controller
 
 
 
+    public function showCourses($id)
+    {
+        $data = Student::with(['Courses'])->find($id);
+        if ($data) {
+
+            return response()->json($data, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
 
 
 
@@ -150,6 +168,19 @@ class CourseController extends Controller
 
 
 
+    public function validation($request)
+    {
+        return $this->apiValidation($request, [
+            'name' => 'required|min:3|max:50',
+            // 'img' => 'required|image|mimes:jpeg,png',
+            'price' => 'required',
+            'category_id' => 'required|exists:App\Models\Category,id',
+            'trainer_id' => 'required|exists:App\Models\Trainer,id',
+            'duration' => 'required',
+            // 'preq'
+            'desc' => 'required|min:3'
+        ]);
+    }
 
 
 
