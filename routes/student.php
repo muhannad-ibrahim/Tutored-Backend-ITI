@@ -11,3 +11,4 @@ Route::get('/students',[StudentController::class, 'index']);
 Route::get('/students/{id}',[StudentController::class, 'show']);
 
 Route::post('/courses/{course}/feedback', [FeedbackController::class, 'store']);
+Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);

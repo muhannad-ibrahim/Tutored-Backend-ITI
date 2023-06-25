@@ -91,7 +91,23 @@ class FeedbackController extends Controller
      */
     public function update(Request $request, Feedback $feedback)
     {
-        //
+        $validatedData = $request->validate([
+            'review' => 'nullable|string',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        $feedback->review = $validatedData['review'];
+        $feedback->rating = $validatedData['rating'];
+        $feedback->save();
+
+        $averageRating = $feedback->course->feedbacks()->avg('rating');
+        $feedback->course->average_rating = $averageRating;
+        $feedback->course->save();
+
+        return response()->json([
+            'message' => 'Feedback updated successfully.',
+            'feedback' => $feedback,
+        ], 200);
     }
 
     /**
