@@ -112,9 +112,23 @@ class FeedbackController extends Controller
         }
 
         // Check if the current user is an admin
-        if (Auth::user()->isAdmin()) {
-        $feedback->delete();
-        return response()->json(['message' => 'Feedback deleted successfully.'], 200);
-    }
+        if (Auth::guard('api')->check()) {
+            // Admin is authorized to delete any feedback
+            $feedback->delete();
+            return response()->json(['message' => 'Feedback deleted successfully.'], 204);
+        }
+
+        // Check if the authenticated user is a student
+        if (Auth::guard('students')->check()) {
+            // Student can only delete their own feedback
+            if ($feedback->student_id == Auth::guard('students')->id()) {
+                $feedback->delete();
+                return response()->json(['message' => 'Feedback deleted successfully.'], 204);
+            } else {
+                return response()->json(['message' => 'You are not authorized to delete this feedback.'], 403);
+            }
+        }
+
+        return response()->json(['message' => 'Please login'], 401);
     }
 }
