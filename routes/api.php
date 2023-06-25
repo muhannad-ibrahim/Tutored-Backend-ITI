@@ -29,4 +29,5 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{id}', [CategoryController::class, 'show']);
 //get categories count
 Route::get('/categories/count',[CategoryController::class,'getCount']);
-
+// get courses of specific category
+Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategoryCourses']);
