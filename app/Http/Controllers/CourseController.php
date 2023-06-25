@@ -19,6 +19,17 @@ class CourseController extends Controller
     }
 
 
+    public function show($id)
+    {
+        $course = Course::with(['category', 'trainer'])->find($id);
+        if ($course) {
+
+            return response()->json($course, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
+
+    
 
     public function store(Request $request)
     {
