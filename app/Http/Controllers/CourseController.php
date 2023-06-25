@@ -123,6 +123,23 @@ class CourseController extends Controller
 
 
 
+    public function destroy($id)
+    {
+        $course = Course::find($id);
+        if (is_null($course)) {
+            return response()->json("Record not found", 404);
+        }
+
+        $course->delete();
+        $img_name = $course->img;
+        if ($img_name !== null) {
+            $path_parts = pathinfo(basename($img_name));
+
+            Cloudinary::destroy($path_parts['filename']);
+        }
+        return response()->json(null, 204);
+    }
+
 
 
 
