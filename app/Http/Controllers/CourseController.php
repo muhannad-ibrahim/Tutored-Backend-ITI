@@ -185,9 +185,23 @@ class CourseController extends Controller
         return response()->json("Not Found", 404);
     }
 
+
+
+   public function studentCount($id)
+    {
+
+        $data = DB::table('course_student')->select('student_id')->where('course_id', '=', $id)->count('student_id');
+
+        if ($data == 0)
+            return response()->json($data, 200);
+        if ($data) {
+            return response()->json($data, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
+
+
     
-
-
 
 
 
