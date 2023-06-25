@@ -29,7 +29,7 @@ class CourseController extends Controller
         return response()->json("Not Found", 404);
     }
 
-    
+
 
     public function store(Request $request)
     {
@@ -63,6 +63,63 @@ class CourseController extends Controller
         return response()->json("Cannot add this course", 400);
     }
 
+
+
+    public function update(Request $request, $id)
+    {
+        $course = Course::find($id);
+        if ($course) {
+
+            if ($request->isMethod('post')) {
+
+                $validation = $this->apiValidation($request, [
+                    'name' => 'required|min:3|max:30',
+                    'img' => 'image|mimes:jpeg,png',
+                    'price' => 'required',
+                    'category_id' => 'exists:categories,id',
+                    'trainer_id' => 'required|exists:App\Models\Trainer,id',
+                    'duration' => 'required',
+                    // 'preq' => '',
+                    'desc' => 'required|min:3',
+                ]);
+                if ($validation instanceof Response) {
+                    return $validation;
+                }
+
+
+            }
+
+            $image = $course->img;
+            if ($request->hasFile('img')) {
+                if ($image !== null) {
+                    $path_parts = pathinfo(basename($image));
+
+                    Cloudinary::destroy($path_parts['filename']);
+                }
+            $image = Cloudinary::upload($request->file('img')->getRealPath())->getSecurePath();
+
+            }
+            Log::alert($request->category_id);
+
+            if ($request->category_id == 0)
+                $category_id = $course->category_id;
+            else
+                $category_id = $request->category_id;
+
+            $course->update([
+                'name' => $request->name,
+                'img' => $image,
+                'category_id' => $category_id,
+                'trainer_id' => $request->trainer_id,
+                'price' => $request->price,
+                'duration' => $request->duration,
+                'preq' => $request->preq,
+                'desc' => $request->desc,
+            ]);
+            return response()->json($course, 200);
+        }
+        return response()->json("Record not found", 404);
+    }
 
 
 
