@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Course;
 
 
 class Trainer extends Authenticatable implements JWTSubject
@@ -29,7 +30,7 @@ class Trainer extends Authenticatable implements JWTSubject
         return $this->hasMany(Course::class);
     }
 
-    
+
 
     /**
     * The attributes that should be cast.
