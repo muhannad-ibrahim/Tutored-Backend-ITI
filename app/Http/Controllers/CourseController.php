@@ -175,7 +175,19 @@ class CourseController extends Controller
     }
 
 
+    public function showStudent($id)
+    {
+        $data = Course::with(['students'])->find($id);
+        if ($data) {
+
+            return response()->json($data, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
+
     
+
+
 
 
 
