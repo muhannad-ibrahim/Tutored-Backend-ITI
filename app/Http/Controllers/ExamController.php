@@ -97,9 +97,32 @@ class ExamController extends Controller
      * @param  \App\Models\Exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Exam $exam)
+    public function update(Request $request, $id)
     {
-        //
+        $trainer = Auth::user();
+        
+        $exam = Exam::where('id', $id)
+        ->whereHas('course', function ($query) use ($trainer) {
+            $query->where('trainer_id', $trainer->id);
+        })
+        ->first();
+
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found or you are not authorized to update this exam.'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
+        }
+        $validatedData = $validator->validated();
+
+        $exam->title = $validatedData['title'];
+        $exam->save();
+
+        return response()->json(['message' => 'Exam updated successfully.', 'exam' => $exam], 200);
     }
 
     /**

@@ -58,6 +58,7 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::post('/trainers/{id}',[TrainerController::class, 'update']);
 
     Route::post('/exams', [ExamController::class, 'store']);
+    Route::put('/exams/{id}', [ExamController::class, 'update']);
 });
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
