@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category ;
 use App\Models\Trainer ;
 use App\Models\Student;
+use App\Models\Course_Content ;
 
 
 class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'img', 'price', 'duration', 'desc', 'preq', 'trainer_id', 'category_id'];
+    protected $fillable = ['name', 'img', 'price', 'duration', 'desc', 'preq','average_rating' ,'trainer_id', 'category_id'];
 
 
        /**
@@ -39,6 +40,16 @@ class Course extends Model
     {
         return $this->belongsToMany(Student::class);
     }
+
+      /**
+     * Get the course_content associated with the course.
+     */
+    public function course_content()
+    {
+        return $this->hasOne(Course_Content::class);
+    }
+
+
 
     public function feedbacks()
     {

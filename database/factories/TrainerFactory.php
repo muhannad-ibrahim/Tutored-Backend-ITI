@@ -21,7 +21,7 @@ class TrainerFactory extends Factory
 
         if ($gender=='male'){
             $img = $male_imgs[array_rand($male_imgs)];
-        } else{
+        }else{
             $img = $female_imgs[array_rand($female_imgs)];
         }
 
