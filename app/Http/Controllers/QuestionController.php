@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -33,9 +36,49 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $examId)
     {
-        //
+        $trainer = Auth::user();
+
+        $exam = Exam::where('id', $examId)
+        ->whereHas('course', function ($query) use ($trainer) {
+            $query->where('trainer_id', $trainer->id);
+        })
+        ->first();
+
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found or you are not authorized to add questions to this exam.'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'header' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*' => 'string',
+            'answer' => 'required|string',
+            'score' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $question = Question::create([
+            'header' => $validatedData['header'],
+            'answer' => $validatedData['answer'],
+            'score' => $validatedData['score'],
+            'exam_id' => $exam->id,
+        ]);
+
+        foreach ($validatedData['choices'] as $choice) {
+            $question->choices()->create([
+                'text' => $choice['text'],
+                'is_correct' => $choice['is_correct'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Question created successfully.', 'question' => $question], 201);
     }
 
     /**
