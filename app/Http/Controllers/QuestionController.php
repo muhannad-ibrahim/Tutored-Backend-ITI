@@ -54,7 +54,6 @@ class QuestionController extends Controller
             'header' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
-            'answer' => 'required|string',
             'score' => 'required|integer',
         ]);
 
@@ -66,7 +65,6 @@ class QuestionController extends Controller
 
         $question = Question::create([
             'header' => $validatedData['header'],
-            'answer' => $validatedData['answer'],
             'score' => $validatedData['score'],
             'exam_id' => $exam->id,
         ]);
@@ -110,9 +108,48 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request, $questionId)
     {
-        //
+        $trainer = Auth::user();
+
+        $question = Question::whereHas('exam.course', function ($query) use ($trainer) {
+            $query->where('trainer_id', $trainer->id);
+        })
+        ->where('id', $questionId)
+        ->first();
+
+        if (!$question) {
+            return response()->json(['message' => 'Question not found or you are not authorized to update this question.'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'header' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*.text' => 'required|string',
+            'choices.*.is_correct' => 'required|boolean',
+            'score' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $question->header = $validatedData['header'];
+        $question->score = $validatedData['score'];
+        $question->save();
+
+        $question->choices()->delete();
+
+        foreach ($validatedData['choices'] as $choice) {
+            $question->choices()->create([
+                'text' => $choice['text'],
+                'is_correct' => $choice['is_correct'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Question updated successfully.', 'question' => $question], 200);
     }
 
     /**
