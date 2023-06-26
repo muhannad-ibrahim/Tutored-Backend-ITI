@@ -74,4 +74,4 @@ Route::middleware('adminOrStudent:students,api')->group(function () {
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
 
-Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);
+Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);

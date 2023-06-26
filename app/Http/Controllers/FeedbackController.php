@@ -76,6 +76,10 @@ class FeedbackController extends Controller
     public function show(Course $course)
     {
         $feedbacks = $course->feedbacks;
+        if (is_null($feedbacks)) {
+            dd('fsfs');
+            return response()->json("Feedbacks not found", 404);
+        }
         return response()->json([
             'message' => 'Feedbacks retrieved successfully for the course.',
             'feedbacks' => $feedbacks,
