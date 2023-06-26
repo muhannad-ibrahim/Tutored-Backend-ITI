@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,3 +75,7 @@ Route::middleware('studentOrAdmin:students,api')->group(function () {
 Route::post('/contact_us', [ContactUsController::class, 'store']);
 
 Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);
+
+
+Route::post('payment-intent', [PaymentController::class,'CreatePayIntent']);
+Route::post('store-intent', [PaymentController::class,'storeStripePayment']);
