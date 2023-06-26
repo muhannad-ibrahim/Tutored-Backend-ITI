@@ -43,6 +43,7 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/students/{id}',[StudentController::class, 'update']);
     Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
     Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
+    Route::get('courses/{courseId}/exams/{examId}', [ExamController::class, 'showExam']);
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);

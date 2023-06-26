@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Exam;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
@@ -147,5 +149,40 @@ class ExamController extends Controller
         $exam->delete();
 
         return response()->json(['message' => 'Exam deleted successfully.'], 204);
+    }
+
+    public function showExam($courseId, $examId)
+    {
+        $student = Auth::user();
+
+        $enrollment = DB::table('course_student')
+        ->where('course_id', $courseId)
+        ->where('student_id', $student->id)
+        ->first();
+
+        if (!$enrollment) {
+            return response()->json(['message' => 'You are not enrolled in this course.'], 403);
+        }
+
+        $exam = Exam::where('id', $examId)
+        ->where('course_id', $courseId)
+        ->first();
+
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found.'], 404);
+        }
+
+        $questions = Question::where('exam_id', $examId)->get();
+
+        if ($questions->isEmpty()) {
+            return response()->json(['message' => 'No questions found for this exam.'], 404);
+        }    
+
+        $examData = [
+            'exam' => $exam,
+            'questions' => $questions,
+        ];
+
+        return response()->json(['message' => 'Exam retrieved successfully.', 'exam' => $examData], 200);
     }
 }
