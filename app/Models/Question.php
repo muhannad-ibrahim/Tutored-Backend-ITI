@@ -15,8 +15,8 @@ class Question extends Model
         return $this->belongsTo(Exam::class);
     }
 
-    public function options()
+    public function choices()
     {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(Choice::class);
     }
 }
