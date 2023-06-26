@@ -70,8 +70,35 @@ class CourseContentController extends Controller
         return response()->json("Cannot send this message", 400);
     }
 
-    
 
+
+
+        /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Course_Content  $course_Content
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $course_content = Course_Content::find($id);
+        if ($course_content) {
+            if ($request->isMethod('put')) {
+                $validation = $this->validation($request);
+                if ($validation instanceof Response) {
+                    return $validation;
+                }
+            }
+
+
+            $course_content->update($request->all());
+            return response()->json($course_content, 200);
+        }
+        return response()->json("Not found", 404);
+    }
+
+    
 
 
 
