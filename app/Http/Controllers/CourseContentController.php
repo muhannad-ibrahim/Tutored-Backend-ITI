@@ -43,6 +43,35 @@ class CourseContentController extends Controller
     }
 
 
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validation = $this->validation($request);
+        if ($validation instanceof Response) {
+            return $validation;
+        }
+        if (is_null($validation)) {
+            $course_content = Course_Content::create([
+                'name' => $request->name,
+                'content' => $request->content,
+                'course_id' => $request->course_id
+            ]);
+            if ($course_content) {
+                // return $this->createdResponse($contact_us);
+                return response()->json($course_content, 200);
+            }
+        }
+        // $this->unKnowError();
+        return response()->json("Cannot send this message", 400);
+    }
+
+    
+
 
 
 
