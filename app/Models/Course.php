@@ -40,4 +40,14 @@ class Course extends Model
         return $this->belongsToMany(Student::class);
     }
 
+      /**
+     * Get the course_content associated with the course.
+     */
+    public function course_content()
+    {
+        return $this->hasOne(Course_Content::class);
+    }
+
+
+
 }
