@@ -10,4 +10,8 @@ class Choice extends Model
     use HasFactory;
     protected $fillable = ['text', 'is_correct', 'question_id'];
 
+    public function question()
+    {
+        return $this->belongsTo(Question::class);
+    }
 }
