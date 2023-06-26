@@ -89,12 +89,22 @@ class FeedbackController extends Controller
      * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, $courseId, $feedbackId)
     {
         $validatedData = $request->validate([
             'review' => 'nullable|string',
             'rating' => 'required|integer|min:1|max:5',
         ]);
+
+        $feedback = Feedback::where('course_id', $courseId)
+        ->where('id', $feedbackId)
+        ->first();
+
+        if (!$feedback) {
+            return response()->json([
+                'message' => 'Feedback not found for the specified course.',
+            ], 404);
+        }
 
         $feedback->review = $validatedData['review'];
         $feedback->rating = $validatedData['rating'];
