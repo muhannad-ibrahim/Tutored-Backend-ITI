@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category ;
 use App\Models\Trainer ;
 use App\Models\Student;
+use App\Models\Course_Content ;
 
 
 class Course extends Model
