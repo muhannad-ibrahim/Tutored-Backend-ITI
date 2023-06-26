@@ -158,8 +158,23 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Question $question)
+    public function destroy($questionId)
     {
-        //
+        $trainer = Auth::user();
+
+        $question = Question::whereHas('exam.course', function ($query) use ($trainer) {
+            $query->where('trainer_id', $trainer->id);
+        })
+        ->where('id', $questionId)
+        ->first();
+
+        if (!$question) {
+            return response()->json(['message' => 'Question not found or you are not authorized to delete this question.'], 404);
+        }
+
+        $question->choices()->delete();
+        $question->delete();
+
+        return response()->json(['message' => 'Question deleted successfully.'], 204);
     }
 }
