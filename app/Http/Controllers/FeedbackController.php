@@ -31,7 +31,7 @@ class FeedbackController extends Controller
      */
     public function store(Request $request, Course $course)
     {
-        $existingFeedback = Feedback::where('student_id', auth()->user()->id)
+        $existingFeedback = Feedback::where('student_id', Auth::guard('students')->user()->id)
         ->where('course_id', $course->id)
         ->first();
 
@@ -51,7 +51,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::create([
             'review' => $validatedData['review'],
             'rating' => $validatedData['rating'],
-            'student_id' => auth()->user()->id,
+            'student_id' => Auth::guard('students')->user()->id,
             'course_id' => $course->id,
         ]);
         $feedback->save();
@@ -77,7 +77,6 @@ class FeedbackController extends Controller
     {
         $feedbacks = $course->feedbacks;
         if (is_null($feedbacks)) {
-            dd('fsfs');
             return response()->json("Feedbacks not found", 404);
         }
         return response()->json([
@@ -108,6 +107,12 @@ class FeedbackController extends Controller
             return response()->json([
                 'message' => 'Feedback not found for the specified course.',
             ], 404);
+        }
+
+        if ($feedback->student_id !== Auth::guard('students')->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized: You are not allowed to update this feedback.',
+            ], 401);
         }
 
         $feedback->review = $validatedData['review'];
