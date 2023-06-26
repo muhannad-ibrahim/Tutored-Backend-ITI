@@ -67,7 +67,7 @@ Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
 Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);
 
-Route::middleware('studentOrAdmin:students,api')->group(function () {
+Route::middleware('adminOrStudent:students,api')->group(function () {
     Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 });
 

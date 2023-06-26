@@ -128,6 +128,7 @@ class FeedbackController extends Controller
      */
     public function destroy(Request $request, $courseId, $feedbackId)
     {   
+        dd('fdf');
         $feedback =  Feedback::find($feedbackId);
         if (is_null($feedback)) {
             return response()->json("Feedback not found", 404);
