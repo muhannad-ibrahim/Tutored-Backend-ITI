@@ -98,8 +98,32 @@ class CourseContentController extends Controller
         return response()->json("Not found", 404);
     }
 
-    
 
+ /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Course_Content  $course_Content
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $course_content = Course_Content::find($id);
+        if (is_null($course_content)) {
+            return response()->json("Record not found", 404);
+        }
+        $course_content->delete();
+        return response()->json(null, 204);
+    }
+
+
+    public function validation($request)
+    {
+        return $this->apiValidation($request, [
+            'name' => 'required|min:3|max:100',
+            'course_id' => 'required|exists:App\Models\Course,id',
+            'content' => 'required|min:3'
+        ]);
+    }
 
 
 }
