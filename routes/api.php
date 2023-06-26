@@ -56,6 +56,8 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::post('/trainers/logout', [TrainerController::class, 'logout']);
     Route::post('/trainers/hello', [TrainerController::class, 'sayHello']);
     Route::post('/trainers/{id}',[TrainerController::class, 'update']);
+
+    Route::post('/exams', [ExamController::class, 'create']);
 });
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
