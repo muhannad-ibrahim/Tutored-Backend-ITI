@@ -61,6 +61,10 @@ class ExamController extends Controller
             'course_id' => $validatedData['course_id'],
         ]);
 
+        if (is_null($exam)) {
+            return response()->json(['message' => 'Exam creation failed.'], 500);
+        }
+
         return response()->json(['message' => 'Exam created successfully.', 'exam' => $exam], 201);
     }
 
