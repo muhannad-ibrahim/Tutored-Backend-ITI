@@ -131,8 +131,21 @@ class ExamController extends Controller
      * @param  \App\Models\Exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Exam $exam)
+    public function destroy($id)
     {
-        //
+        $trainer = Auth::user();
+
+        $exam = Exam::where('id', $id)
+        ->whereHas('course', function ($query) use ($trainer) {
+            $query->where('trainer_id', $trainer->id);
+        })
+        ->first();
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found or you are not authorized to delete this exam.'], 404);
+        }
+
+        $exam->delete();
+
+        return response()->json(['message' => 'Exam deleted successfully.'], 204);
     }
 }
