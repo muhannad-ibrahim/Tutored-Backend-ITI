@@ -5,7 +5,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
@@ -43,7 +43,7 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/student/hello', [StudentController::class, 'sayHello']);
     Route::post('/students/{id}',[StudentController::class, 'update']);
     Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
-    Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
+    Route::patch('/courses/{courseId}/feedback/{feedbackId}', [FeedbackController::class, 'update']);
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);
@@ -64,11 +64,12 @@ Route::get('/trainers/count',[TrainerController::class,'getCount']);
 //get courses count
 Route::get('/courses/count',[CourseController::class,'getCount']);
 Route::get('/courses', [CourseController::class, 'index']);
-Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::get('/courses/{id}', [CourseController::class, 'show'])->where('id', '[0-9]+');
+;
 Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
 Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);
 
-Route::middleware('studentOrAdmin:students,api')->group(function () {
+Route::middleware('adminOrStudent:students,api')->group(function () {
     Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 });
 
@@ -79,3 +80,4 @@ Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);
 
 Route::post('payment-intent', [PaymentController::class,'CreatePayIntent']);
 Route::post('store-intent', [PaymentController::class,'storeStripePayment']);
+Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);

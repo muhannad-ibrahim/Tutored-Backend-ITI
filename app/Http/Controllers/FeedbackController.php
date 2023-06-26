@@ -31,6 +31,18 @@ class FeedbackController extends Controller
      */
     public function store(Request $request, Course $course)
     {
+        $existingFeedback = Feedback::where('student_id', auth()->user()->id)
+        ->where('course_id', $course->id)
+        ->first();
+
+        if ($existingFeedback) {
+            return response()->json([
+                'message' => 'You have already reviewed this course.',
+                'feedback' => $existingFeedback,
+                'course' => $course,
+            ], 400);
+        }
+
         $validatedData = $request->validate([
             'review' => 'nullable|string|min:10|max:512',
             'rating' => 'required|integer|min:1|max:5',
@@ -64,6 +76,10 @@ class FeedbackController extends Controller
     public function show(Course $course)
     {
         $feedbacks = $course->feedbacks;
+        if (is_null($feedbacks)) {
+            dd('fsfs');
+            return response()->json("Feedbacks not found", 404);
+        }
         return response()->json([
             'message' => 'Feedbacks retrieved successfully for the course.',
             'feedbacks' => $feedbacks,
@@ -77,12 +93,22 @@ class FeedbackController extends Controller
      * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, $courseId, $feedbackId)
     {
         $validatedData = $request->validate([
             'review' => 'nullable|string',
             'rating' => 'required|integer|min:1|max:5',
         ]);
+
+        $feedback = Feedback::where('course_id', $courseId)
+        ->where('id', $feedbackId)
+        ->first();
+
+        if (!$feedback) {
+            return response()->json([
+                'message' => 'Feedback not found for the specified course.',
+            ], 404);
+        }
 
         $feedback->review = $validatedData['review'];
         $feedback->rating = $validatedData['rating'];
