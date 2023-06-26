@@ -33,7 +33,6 @@ class TrainerController extends Controller
         $image="train -".uniqid().".$ext";
         $img->move(public_path("uploads/trainer/"),$image);
 
-
         $trainers = Trainer::create([
             'fname'=>$request->fname ,
             'lname'=>$request->lname ,
@@ -67,7 +66,6 @@ class TrainerController extends Controller
             'phone'=>$request->phone ,
             'email'=>$request->email ,
             'password'=>Hash::make($request->password),
-
         ]);
         if ($trainers) {
             return $this->createdResponse($trainers);

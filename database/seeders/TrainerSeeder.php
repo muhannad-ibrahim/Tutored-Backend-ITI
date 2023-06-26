@@ -17,8 +17,6 @@ class TrainerSeeder extends Seeder
      */
     public function run()
     {
-
-
         DB::table('trainers')->insert([
             'fname' => 'mohammed',
             'lname' => 'abdullah',
@@ -26,8 +24,6 @@ class TrainerSeeder extends Seeder
             'phone' => 1355654685,
             'email' => 'mohammed@gmail.com',
             'password' => Hash::make('12345678'),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ]);
         
         Trainer::factory()
