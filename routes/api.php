@@ -63,7 +63,8 @@ Route::get('/trainers/count',[TrainerController::class,'getCount']);
 //get courses count
 Route::get('/courses/count',[CourseController::class,'getCount']);
 Route::get('/courses', [CourseController::class, 'index']);
-Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::get('/courses/{id}', [CourseController::class, 'show'])->where('id', '[0-9]+');
+;
 Route::get('/student/studentCount/{id}', [CourseController::class, 'studentCount']);
 Route::post('/studentcourseenroll', [CourseController::class, 'course_student_enroll']);
 
