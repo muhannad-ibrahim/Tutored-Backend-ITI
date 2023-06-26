@@ -31,6 +31,18 @@ class FeedbackController extends Controller
      */
     public function store(Request $request, Course $course)
     {
+        $existingFeedback = Feedback::where('student_id', auth()->user()->id)
+        ->where('course_id', $course->id)
+        ->first();
+
+        if ($existingFeedback) {
+            return response()->json([
+                'message' => 'You have already reviewed this course.',
+                'feedback' => $existingFeedback,
+                'course' => $course,
+            ], 400);
+        }
+
         $validatedData = $request->validate([
             'review' => 'nullable|string|min:10|max:512',
             'rating' => 'required|integer|min:1|max:5',
