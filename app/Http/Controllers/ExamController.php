@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Exam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
 {
@@ -35,7 +38,30 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $trainer = Auth::user();
+
+        $course = Course::where('trainer_id', $trainer->id)
+        ->where('id', $request->input('course_id'))
+        ->first();
+        if (!$course) {
+            return response()->json(['message' => 'You are not authorized to create an exam for this course.'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
+        }
+        $validatedData = $validator->validated();
+
+        $exam = Exam::create([
+            'title' => $validatedData['title'],
+            'course_id' => $validatedData['course_id'],
+        ]);
+
+        return response()->json(['message' => 'Exam created successfully.', 'exam' => $exam], 201);
     }
 
     /**
