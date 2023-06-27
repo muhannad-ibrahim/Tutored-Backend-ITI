@@ -40,8 +40,7 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        $trainer = Auth::user();
-
+        $trainer = Auth::guard('trainers')->user();
         $course = Course::where('trainer_id', $trainer->id)
         ->where('id', $request->input('course_id'))
         ->first();
@@ -101,7 +100,7 @@ class ExamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $trainer = Auth::user();
+        $trainer = Auth::guard('trainers')->user();
         
         $exam = Exam::where('id', $id)
         ->whereHas('course', function ($query) use ($trainer) {
@@ -135,7 +134,7 @@ class ExamController extends Controller
      */
     public function destroy($id)
     {
-        $trainer = Auth::user();
+        $trainer = Auth::guard('trainers')->user();
 
         $exam = Exam::where('id', $id)
         ->whereHas('course', function ($query) use ($trainer) {
