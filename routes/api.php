@@ -6,6 +6,7 @@ use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuestionController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

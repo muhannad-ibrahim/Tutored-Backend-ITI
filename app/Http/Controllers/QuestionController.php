@@ -38,7 +38,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request, $examId)
     {
-        $trainer = Auth::user();
+        $trainer = Auth::guard('trainers')->user();
 
         $exam = Exam::where('id', $examId)
         ->whereHas('course', function ($query) use ($trainer) {
@@ -53,7 +53,8 @@ class QuestionController extends Controller
         $validator = Validator::make($request->all(), [
             'header' => 'required|string',
             'choices' => 'required|array',
-            'choices.*' => 'string',
+            'choices.*.text' => 'required|string',
+            'choices.*.is_correct' => 'required|boolean',
             'score' => 'required|integer',
         ]);
 
@@ -110,7 +111,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $questionId)
     {
-        $trainer = Auth::user();
+        $trainer = Auth::guard('trainers')->user();
 
         $question = Question::whereHas('exam.course', function ($query) use ($trainer) {
             $query->where('trainer_id', $trainer->id);
@@ -160,7 +161,7 @@ class QuestionController extends Controller
      */
     public function destroy($questionId)
     {
-        $trainer = Auth::user();
+        $trainer = Auth::guard('trainers')->user();
 
         $question = Question::whereHas('exam.course', function ($query) use ($trainer) {
             $query->where('trainer_id', $trainer->id);
