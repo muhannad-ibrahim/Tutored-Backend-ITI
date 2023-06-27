@@ -78,9 +78,8 @@ class CourseController extends Controller
     {
         $course = Course::find($id);
         if ($course) {
-
+            // Validation for POST method
             if ($request->isMethod('post')) {
-
                 $validation = $this->apiValidation($request, [
                     'name' => 'required|min:3|max:30',
                     'img' => 'image|mimes:jpeg,png',
@@ -88,48 +87,46 @@ class CourseController extends Controller
                     'category_id' => 'exists:categories,id',
                     'trainer_id' => 'required|exists:App\Models\Trainer,id',
                     'duration' => 'required',
-                    // 'preq' => '',
                     'desc' => 'required|min:3',
                 ]);
                 if ($validation instanceof Response) {
                     return $validation;
                 }
-
-
             }
 
             $image = $course->img;
             if ($request->hasFile('img')) {
                 if ($image !== null) {
                     $path_parts = pathinfo(basename($image));
-
                     Cloudinary::destroy($path_parts['filename']);
                 }
-            $image = Cloudinary::upload($request->file('img')->getRealPath())->getSecurePath();
-
+                $image = Cloudinary::upload($request->file('img')->getRealPath())->getSecurePath();
             }
+
             Log::alert($request->category_id);
 
-            if ($request->category_id == 0)
+            if ($request->category_id == 0) {
                 $category_id = $course->category_id;
-            else
+            } else {
                 $category_id = $request->category_id;
+            }
 
-            $course->update([
-                'name' => $request->name,
-                'img' => $image,
-                'category_id' => $category_id,
-                'trainer_id' => $request->trainer_id,
-                'price' => $request->price,
-                'duration' => $request->duration,
-                'preq' => $request->preq,
-                'desc' => $request->desc,
-            ]);
+            // Update the course data
+            $course->name = $request->input('name', $course->name); // Use existing name if not provided in PATCH request
+            $course->img = $image;
+            $course->category_id = $category_id;
+            $course->trainer_id = $request->trainer_id;
+            $course->price = $request->price;
+            $course->duration = $request->duration;
+            $course->preq = $request->preq;
+            $course->desc = $request->desc;
+            $course->save();
+
             return response()->json($course, 200);
         }
+
         return response()->json("Record not found", 404);
     }
-
 
 
     public function destroy($id)
@@ -201,7 +198,7 @@ class CourseController extends Controller
     }
 
 
-        public function course_student_enroll(Request $request){
+    public function course_student_enroll(Request $request){
 
             $course_id=$request->course_id;
             $student_id=$request->student_id;
@@ -213,7 +210,7 @@ class CourseController extends Controller
             else{
             return response()->json("Not Found", 404);
             }
-        }
+    }
 
 
 
@@ -262,9 +259,9 @@ class CourseController extends Controller
                 'body' => "You have enrolled successfully $course_name ",
             ];
 
-            $email = DB::select("select email from students where id = $request->student_id");
+            // $email = DB::select("select email from students where id = $request->student_id");
 
-            Mail::to($email)->send(new welcomemail($details));
+            // Mail::to($email)->send(new welcomemail($details));
 
             return response()->json($enrolle, 200);
         }
