@@ -212,14 +212,55 @@ class ExamController extends Controller
     }
 
     public function getAllExamQuestions($examId)
-{
-    $exam = Exam::find($examId);
-    if (!$exam) {
-        return response()->json(['message' => 'Exam not found.'], 404);
-    }
-    
-    $questions = $exam->questions()->with('choices')->get();
+    {
+        $exam = Exam::find($examId);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found.'], 404);
+        }
+        
+        $questions = $exam->questions()->with('choices')->get();
 
-    return response()->json(['message' => 'Questions retrieved successfully.', 'questions' => $questions], 200);
-}
+        return response()->json(['message' => 'Questions retrieved successfully.', 'questions' => $questions], 200);
+    }
+
+    public function storeExamDegree(Request $request, $courseId, $examId)
+    {
+        $student = Auth::guard('students')->user();
+        
+        $enrollment = DB::table('course_student')
+            ->where('course_id', $courseId)
+            ->where('student_id', $student->id)
+            ->first();
+        if (!$enrollment) {
+            return response()->json(['message' => 'You are not enrolled in this course.'], 403);
+        }
+        
+        $exam = Exam::find($examId);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found.'], 404);
+        }
+
+        $course = Course::find($courseId);
+        if (!$course) {
+            return response()->json(['message' => 'Course not found.'], 404);
+        }
+        
+        $validator = Validator::make($request->all(), [
+            'degree' => 'required|numeric|min:0',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
+        }
+        
+        $degree = $request->input('degree');
+        
+        DB::table('student_subject_exam')->insert([
+            'degree' => $degree,
+            'exam_id' => $exam->id,
+            'student_id' => $student->id,
+        ]);
+        
+        return response()->json(['message' => 'Exam degree stored successfully.'], 200);
+    }
 }
