@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\zoom_class;
+use App\Http\Traits\ApiResponseTrait;
+use Illuminate\Http\Response;
 
 class ZoomClassesController extends Controller
 {
+    use ApiResponseTrait;
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +17,8 @@ class ZoomClassesController extends Controller
      */
     public function index()
     {
-        //
+        $zoom_classes = zoom_class::get();
+        return $this->apiResponse($zoom_classes);
     }
 
     /**

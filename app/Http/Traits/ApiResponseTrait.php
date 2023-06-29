@@ -58,12 +58,7 @@ public function apiValidation($request, $array){
     if($validate->fails()){
         return $this->apiResponse(null, $validate->errors(), 422);
     }
-
 }
-
-
-
-
 }
 
 

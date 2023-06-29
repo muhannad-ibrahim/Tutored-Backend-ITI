@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ZoomClassesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,3 +81,7 @@ Route::get('/courses/{course}/feedback', [FeedbackController::class, 'show']);
 Route::post('payment-intent', [PaymentController::class,'CreatePayIntent']);
 Route::post('store-intent', [PaymentController::class,'storeStripePayment']);
 Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);
+
+
+// routes for zoom classes
+Route::get('/zoom_classes', [ZoomClassesController::class, 'index']);
