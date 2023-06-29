@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,6 @@ Route::get('/contact_us/{id}', [ContactUsController::class, 'show']);
 Route::delete('/contact_us/{id}', [ContactUsController::class, 'destroy']);
 
 Route::get('/courses/feedbacks', [FeedbackController::class, 'index']);
+
+Route::get('/exams', [ExamController::class, 'index']);
 

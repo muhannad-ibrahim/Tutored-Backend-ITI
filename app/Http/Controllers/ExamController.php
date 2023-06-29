@@ -19,7 +19,9 @@ class ExamController extends Controller
      */
     public function index()
     {
-        //
+        $exams = Exam::with('course')->get();
+
+        return response()->json(['exams' => $exams], 200);
     }
 
     /**

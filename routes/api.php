@@ -81,6 +81,7 @@ Route::post('/studentcourseenroll', [CourseController::class, 'course_student_en
 Route::middleware('adminOrStudent:students,api')->group(function () {
     Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
     Route::get('/courses/{courseId}/exams', [ExamController::class, 'getAllCourseExams']);
+    Route::get('/courses/{courseId}/exams-with-questions', [ExamController::class, 'getAllCourseExamsWithQuestions']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
