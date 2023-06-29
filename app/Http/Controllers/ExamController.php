@@ -210,4 +210,16 @@ class ExamController extends Controller
 
         return response()->json(['message' => 'Exams retrieved successfully.', 'exams' => $exams], 200);
     }
+
+    public function getAllExamQuestions($examId)
+{
+    $exam = Exam::find($examId);
+    if (!$exam) {
+        return response()->json(['message' => 'Exam not found.'], 404);
+    }
+    
+    $questions = $exam->questions()->with('choices')->get();
+
+    return response()->json(['message' => 'Questions retrieved successfully.', 'questions' => $questions], 200);
+}
 }
