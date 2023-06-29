@@ -13,6 +13,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "macsidigital/laravel-zoom": "^7.0",
         "pusher/pusher-php-server": "^7.0",
         "stripe/stripe-php": "^7.115",
         "symfony/mailer": "^5.4",
