@@ -263,4 +263,25 @@ class ExamController extends Controller
         
         return response()->json(['message' => 'Exam degree stored successfully.'], 200);
     }
+
+    public function getExamDegree($courseId, $examId)
+    {
+        $student = Auth::guard('students')->user();
+    
+        $examDegree = DB::table('student_subject_exam')
+        ->join('students', 'student_subject_exam.student_id', '=', 'students.id')
+        ->join('exams', 'student_subject_exam.exam_id', '=', 'exams.id')
+        ->join('courses', 'exams.course_id', '=', 'courses.id')
+        ->select('student_subject_exam.degree', 'students.fname', 'students.lname', 'students.email', 'courses.name as course_name')
+        ->where('student_subject_exam.student_id', $student->id)
+        ->where('student_subject_exam.exam_id', $examId)
+        ->first();
+    
+        if (!$examDegree) {
+            return response()->json(['message' => 'Exam degree not found.'], 404);
+        }
+    
+        return response()->json(['exam_degree' => $examDegree], 200);
+    }
+    
 }
