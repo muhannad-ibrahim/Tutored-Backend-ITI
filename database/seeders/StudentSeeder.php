@@ -25,6 +25,8 @@ class StudentSeeder extends Seeder
             'phone' => 1234567892,        
             'email' => 'muhannad@gmail.com',
             'password' => Hash::make('12345678'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         Student::factory()

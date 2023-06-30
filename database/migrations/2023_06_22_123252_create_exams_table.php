@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('max_score');
+            
+            $table->string('title');
             $table->foreignId('course_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }

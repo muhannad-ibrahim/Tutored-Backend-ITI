@@ -6,6 +6,9 @@ use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuestionController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
@@ -45,6 +48,10 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/students/{id}',[StudentController::class, 'update']);
     Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
     Route::patch('/courses/{courseId}/feedback/{feedbackId}', [FeedbackController::class, 'update']);
+    Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
+    Route::get('courses/{courseId}/exams/{examId}', [ExamController::class, 'showExam']);
+    Route::post('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'storeExamDegree']);
+    Route::get('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'getExamDegree']);
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);
@@ -58,6 +65,14 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::post('/trainers/logout', [TrainerController::class, 'logout']);
     Route::post('/trainers/hello', [TrainerController::class, 'sayHello']);
     Route::post('/trainers/{id}',[TrainerController::class, 'update']);
+
+    Route::post('/exams', [ExamController::class, 'store']);
+    Route::put('/exams/{id}', [ExamController::class, 'update']);
+    Route::delete('/exams/{id}', [ExamController::class, 'destroy']);
+
+    Route::post('/exams/{examId}/questions', [QuestionController::class, 'store']);
+    Route::put('questions/{questionId}', [QuestionController::class, 'update']);
+    Route::delete('questions/{questionId}', [QuestionController::class, 'destroy']);
 });
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
@@ -71,6 +86,9 @@ Route::post('/studentcourseenroll', [CourseController::class, 'course_student_en
 
 Route::middleware('adminOrStudent:students,api')->group(function () {
     Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
+    Route::get('/courses/{courseId}/exams', [ExamController::class, 'getAllCourseExams']);
+    Route::get('/courses/{courseId}/exams-with-questions', [ExamController::class, 'getAllCourseExamsWithQuestions']);
+    Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
