@@ -85,3 +85,4 @@ Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);
 
 // routes for zoom classes
 Route::get('/zoom_classes', [ZoomClassesController::class, 'index']);
+Route::post('/zoom_classes', [ZoomClassesController::class, 'store']);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\zoom_class;
 use App\Http\Traits\ApiResponseTrait;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ZoomClassesController extends Controller
 {
@@ -39,7 +39,26 @@ class ZoomClassesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $zoomMeeting = zoom_class::create([
+                'integration' => true,
+                'trainer_id' => Auth::guard('trainers')->user()->id,
+                'meeting_id' => $request->meeting_id,
+                'topic' => $request->topic,
+                'start_at' => $request->start_time,
+                'duration' => $request->duration,
+                'password' => $request->password,
+                'start_url' => $request->start_url,
+                'join_url' => $request->join_url,
+            ]);
+
+            return $this->createdResponse($zoomMeeting);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 404);
+        }
     }
 
     /**
