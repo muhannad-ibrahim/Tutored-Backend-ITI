@@ -37,7 +37,7 @@ class StudentController extends Controller
         }
 
         return response()->json([
-            'message' => $e->getMessage(),
+            'message' => "can't create student",
         ], 404);
     }
 
@@ -62,7 +62,7 @@ class StudentController extends Controller
         }
 
         return response()->json([
-            'message' => $e->getMessage(),
+            'message' => "can't create student",
         ], 422);
     }
 
@@ -113,7 +113,7 @@ class StudentController extends Controller
         }
 
         return response()->json([
-            'message' => $e->getMessage(),
+            'message' => "can't update student",
         ], 422);
     }
 
