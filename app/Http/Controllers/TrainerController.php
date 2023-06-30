@@ -126,7 +126,9 @@ class TrainerController extends Controller
             return $this->createdResponse($trainer);
         }
 
-        $this->unKnowError();
+        return response()->json([
+            'message' => $e->getMessage(),
+        ], 422);
     }
 
     public function destroy($id)
