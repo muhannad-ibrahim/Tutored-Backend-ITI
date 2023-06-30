@@ -87,3 +87,14 @@ Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);
 Route::get('/zoom_classes', [ZoomClassesController::class, 'index']);
 Route::post('/zoom_classes', [ZoomClassesController::class, 'store']);
 Route::delete('/zoom_classes/{id}', [ZoomClassesController::class, 'destroy']);
+
+// Verify email
+Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
+// Resend link to verify email
+Route::post('/email/verify/resend', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth:api', 'throttle:6,1'])->name('verification.send');

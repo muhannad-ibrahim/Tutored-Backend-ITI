@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ApiResponseTrait;
 use App\Models\Student;
-use Dotenv\Validator;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +58,7 @@ class StudentController extends Controller
         ]);
         
         if ($students) {
+            event(new Registered($students));
             return $this->createdResponse($students);
         }
 
