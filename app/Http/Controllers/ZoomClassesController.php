@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\zoom_class;
 use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Auth;
+use MacsiDigital\Zoom\Facades\Zoom;
 
 class ZoomClassesController extends Controller
 {
@@ -60,8 +61,16 @@ class ZoomClassesController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        
+        try {
+            zoom_class::destroy($id);
+
+            return $this->deleteResponse();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 404);
+        }
     }
 }
