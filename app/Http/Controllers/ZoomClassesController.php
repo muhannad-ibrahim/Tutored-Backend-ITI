@@ -36,6 +36,8 @@ class ZoomClassesController extends Controller
                 'join_url' => $request->join_url,
             ]);
 
+            $zoomMeeting['id'] = $zoomMeeting->id;
+
             return $this->createdResponse($zoomMeeting);
 
         } catch (\Exception $e) {
