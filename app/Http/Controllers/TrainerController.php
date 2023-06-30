@@ -49,7 +49,9 @@ class TrainerController extends Controller
             return $this->createdResponse($trainers);
         }
 
-        $this->unKnowError();
+        return response()->json([
+            'message' => "can't create trainer",
+        ], 404);
     }
 
     public function register(Request $request)
@@ -70,9 +72,9 @@ class TrainerController extends Controller
         if ($trainers) {
             return $this->createdResponse($trainers);
         }
-        
+
         return response()->json([
-            'message' => $e->getMessage(),
+            'message' => "can't create trainer",
         ], 422);
     }
 
@@ -129,7 +131,7 @@ class TrainerController extends Controller
         }
 
         return response()->json([
-            'message' => $e->getMessage(),
+            'message' => "can't update trainer",
         ], 422);
     }
 
