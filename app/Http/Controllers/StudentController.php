@@ -61,7 +61,9 @@ class StudentController extends Controller
             return $this->createdResponse($students);
         }
 
-        $this->unKnowError();
+        return response()->json([
+            'message' => $e->getMessage(),
+        ], 422);
     }
 
     public function show($id)
