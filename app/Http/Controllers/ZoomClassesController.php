@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\zoom_class;
 use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Auth;
-use MacsiDigital\Zoom\Facades\Zoom;
 
 class ZoomClassesController extends Controller
 {
