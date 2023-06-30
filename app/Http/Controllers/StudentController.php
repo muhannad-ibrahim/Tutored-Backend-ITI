@@ -112,7 +112,9 @@ class StudentController extends Controller
             return $this->createdResponse($student);
         }
 
-        $this->unKnowError();
+        return response()->json([
+            'message' => $e->getMessage(),
+        ], 422);
     }
 
     public function destroy($id)
