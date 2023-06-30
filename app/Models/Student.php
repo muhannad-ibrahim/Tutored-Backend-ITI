@@ -8,21 +8,22 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Course;
 
 
-class Student extends Authenticatable implements JWTSubject
+class Student extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     use  HasFactory, Notifiable;
 
     protected $fillable = ['fname', 'lname','gender','phone','img','email','password' ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Get the feedbacks of the student.
      */
-
-
-
     public function courses()
     {
         return $this->belongsToMany(Course::class);
