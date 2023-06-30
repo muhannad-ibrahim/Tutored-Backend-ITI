@@ -15,6 +15,7 @@ class CreateZoomClassesTable extends Migration
     {
         Schema::create('zoom_classes', function (Blueprint $table) {
             $table->id();
+            $table->boolean('integration');
             $table->foreignId('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
             $table->string('meeting_id');
             $table->string('topic');
