@@ -70,8 +70,10 @@ class TrainerController extends Controller
         if ($trainers) {
             return $this->createdResponse($trainers);
         }
-
-        $this->unKnowError();
+        
+        return response()->json([
+            'message' => $e->getMessage(),
+        ], 422);
     }
 
     public function show($id)
