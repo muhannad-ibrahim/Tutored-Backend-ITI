@@ -305,7 +305,25 @@ class CourseController extends Controller
         ], 200);
     }
 
+    public function getProgress($courseId)
+    {
+        $student = Auth::guard('students')->user();
 
+        $studentCourse = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->first();
+
+        if (!$studentCourse) {
+            return response()->json([
+                'message' => 'Course not found for the specified student.',
+            ], 404);
+        }
+
+        return response()->json([
+            'progress' => $studentCourse->progress,
+        ], 200);
+    }
 
      public function validation($request)
     {
