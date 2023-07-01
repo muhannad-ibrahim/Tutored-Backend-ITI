@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CertificateEmail;
 
 class CourseController extends Controller
 {
@@ -323,6 +325,47 @@ class CourseController extends Controller
         return response()->json([
             'progress' => $studentCourse->progress,
         ], 200);
+    }
+
+    public function completeCourse($courseId)
+    {
+        $student = Auth::guard('students')->user();
+        $progress = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->value('progress');
+
+        if ($progress == 100) {
+            $course = DB::table('courses')
+            ->where('id', $courseId)
+            ->select('name')
+            ->first();
+
+            $examDegree = DB::table('student_subject_exam')
+            ->join('exams', 'student_subject_exam.exam_id', '=', 'exams.id')
+            ->where('exams.course_id', $courseId)
+            ->where('student_subject_exam.student_id', $student->id)
+            ->select('student_subject_exam.degree')
+            ->first();
+
+            if ($examDegree && $examDegree->degree >= 70) {
+                // Generate the certificate and send it to the student's email
+                $certificateData = [
+                    'student_name' => $student->name,
+                    'course_name' => $course->name,
+                ];
+
+                // Send the certificate email
+
+                return response()->json([
+                    'message' => 'Congratulations! You have completed the course. The certificate has been sent to your email.',
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Course completion criteria not met.',
+        ], 400);
     }
 
      public function validation($request)
