@@ -8,6 +8,7 @@ use App\Models\Course_Content;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Mail\welcomemail;
 use Illuminate\Support\Facades\Mail;
@@ -269,15 +270,22 @@ class CourseController extends Controller
         return response()->json("Cannot add this course", 400);
     }
 
+    public function updateProgress(Request $request, Course $course)
+    {
+        $student = Auth::guard('students')->user();
 
+        $validatedData = $request->validate([
+            'progress' => 'required|integer|min:0|max:100',
+        ]);
 
+        $student->courses()->updateExistingPivot($course->id, [
+            'progress' => $validatedData['progress'],
+        ]);
 
-
-
-
-
-
-
+        return response()->json([
+            'message' => 'Course progress updated successfully.',
+        ], 200);
+    }
 
      public function validation($request)
     {
