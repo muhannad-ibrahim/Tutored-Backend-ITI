@@ -330,6 +330,7 @@ class CourseController extends Controller
     public function completeCourse($courseId)
     {
         $student = Auth::guard('students')->user();
+
         $progress = DB::table('course_student')
             ->where('student_id', $student->id)
             ->where('course_id', $courseId)
@@ -351,11 +352,12 @@ class CourseController extends Controller
             if ($examDegree && $examDegree->degree >= 70) {
                 // Generate the certificate and send it to the student's email
                 $certificateData = [
-                    'student_name' => $student->name,
+                    'student_name' => $student->fname,
                     'course_name' => $course->name,
                 ];
-
+                
                 // Send the certificate email
+                Mail::to($student->email)->send(new CertificateEmail($certificateData));
 
                 return response()->json([
                     'message' => 'Congratulations! You have completed the course. The certificate has been sent to your email.',
