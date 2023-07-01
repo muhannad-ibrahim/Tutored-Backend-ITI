@@ -4,17 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ApiResponseTrait;
 use App\Models\Course;
-use App\Models\Course_Content;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Mail\welcomemail;
-use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Support\Facades\Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
@@ -270,22 +267,45 @@ class CourseController extends Controller
         return response()->json("Cannot add this course", 400);
     }
 
-    public function updateProgress(Request $request, Course $course)
+    public function updateProgress(Request $request, $courseId)
     {
         $student = Auth::guard('students')->user();
 
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'progress' => 'required|integer|min:0|max:100',
         ]);
 
-        $student->courses()->updateExistingPivot($course->id, [
-            'progress' => $validatedData['progress'],
-        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $studentCourse = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->first();
+
+        if (!$studentCourse) {
+            return response()->json([
+                'message' => 'Course not found for the specified student.',
+            ], 404);
+        }
+
+        DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $studentCourse->course_id)
+            ->update(['progress' => $validatedData['progress']]);
 
         return response()->json([
             'message' => 'Course progress updated successfully.',
         ], 200);
     }
+
+
 
      public function validation($request)
     {

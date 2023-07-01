@@ -8,7 +8,6 @@ use App\Models\Category ;
 use App\Models\Trainer ;
 use App\Models\Student;
 use App\Models\Course_Content ;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class Course extends Model
@@ -37,10 +36,9 @@ class Course extends Model
 
 
 
-    public function students(): BelongsToMany
+    public function students()
     {
-        return $this->belongsToMany(Student::class, 'course_student')
-            ->withPivot('progress');
+        return $this->belongsToMany(Student::class);
     }
 
       /**

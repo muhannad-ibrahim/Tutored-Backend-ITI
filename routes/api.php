@@ -52,7 +52,8 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('courses/{courseId}/exams/{examId}', [ExamController::class, 'showExam']);
     Route::post('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'storeExamDegree']);
     Route::get('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'getExamDegree']);
-    Route::put('/courses/{course}/progress', [CourseController::class, 'updateProgress']);
+    Route::put('/courses/{courseId}/progress', [CourseController::class, 'updateProgress']);
+    Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);

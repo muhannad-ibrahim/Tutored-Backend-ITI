@@ -26,7 +26,7 @@ class Student extends Authenticatable implements MustVerifyEmail, JWTSubject
      */
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'student_course')->withPivot('progress');
+        return $this->belongsToMany(Course::class);
     }
 
 
