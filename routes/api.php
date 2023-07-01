@@ -30,12 +30,12 @@ use App\Http\Controllers\ChatMessageController;
 //login Admin
 Route::post('login', [AuthController::class, 'login']);
 
+//get categories count
 //get categories
 Route::get('/categories', [CategoryController::class, 'index']);
 //get categories by id
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-//get categories count
 Route::get('/categories/count',[CategoryController::class,'getCount']);
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->where('id', '[0-9]+');
 // get courses of specific category
 Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategoryCourses']);
 // routes for student
