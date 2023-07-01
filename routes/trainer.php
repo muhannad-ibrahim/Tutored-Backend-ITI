@@ -7,12 +7,6 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseContentController;
 
-
-
-Route::get('/trainers', [TrainerController::class, 'index']);
-Route::get('/trainers/{id}', [TrainerController::class, 'show']);
-
-
 Route::post('/courses', [CourseController::class, 'store']);
 Route::post('/courses/{id}', [CourseController::class, 'update']);
 Route::patch('/courses/{id}', [CourseController::class, 'update']);

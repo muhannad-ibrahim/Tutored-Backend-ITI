@@ -37,7 +37,10 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::get('/categories/count',[CategoryController::class,'getCount']);
 // get courses of specific category
 Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategoryCourses']);
+
 // routes for student
+Route::get('/students',[StudentController::class, 'index']);
+Route::get('/students/{id}',[StudentController::class, 'show']);
 Route::post('/student/register',[StudentController::class,'register']);
 Route::post('/student/login', [StudentController::class, 'login']);
 
@@ -60,6 +63,8 @@ Route::middleware('checkStudent:students')->group(function () {
 Route::get('/students/count',[StudentController::class,'getCount']);
 
 // routes for trainer
+Route::get('/trainers', [TrainerController::class, 'index']);
+Route::get('/trainers/{id}', [TrainerController::class, 'show']);
 Route::post('/trainers/register', [TrainerController::class, 'register']);
 Route::post('/trainers/login', [TrainerController::class, 'login']);
 
