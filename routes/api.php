@@ -14,6 +14,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\VerifyEmailController;
+use App\Http\Controllers\ChatMessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,3 +117,6 @@ Route::post('/email/verify/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth:api', 'throttle:6,1'])->name('verification.send');
+
+
+Route::post('chat/send-message', [ChatMessageController::class, 'sendMessage']);

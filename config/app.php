@@ -174,7 +174,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
@@ -183,11 +183,11 @@ return [
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
 
 
-      
-          
+
+
      CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
-            
-        
+
+
     ],
 
     /*

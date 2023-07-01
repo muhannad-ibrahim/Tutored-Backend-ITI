@@ -40,37 +40,72 @@ class CourseController extends Controller
 
 
 
+    // public function store(Request $request)
+    // {
+
+    //     $validation = $this->validation($request);
+    //     if ($validation instanceof Response) {
+    //         return $validation;
+    //     }
+
+    //     // $img = $request->file('img');
+    //     // $ext = $img->getClientOriginalExtension();
+    //     // $image = "course -" . uniqid() . ".$ext";
+    //     // $img->move(public_path("uploads/courses/"), $image);
+    //     $image = cloudinary()->upload($request->file('img')->getRealPath())->getSecurePath();
+
+    //     $course = Course::create([
+    //         'name' => $request->name,
+    //         'img' => $image,
+    //         'category_id' => $request->category_id,
+    //         'trainer_id' => $request->trainer_id,
+    //         'price' => $request->price,
+    //         'duration' => $request->duration,
+    //         'preq' => $request->preq,
+    //         'desc' => $request->desc,
+    //     ]);
+
+    //     if ($course) {
+    //         return response()->json($course, 200);
+    //     }
+
+    //     return response()->json("Cannot add this course", 400);
+    // }
+
+
     public function store(Request $request)
-    {
-
-        $validation = $this->validation($request);
-        if ($validation instanceof Response) {
-            return $validation;
-        }
-
-        // $img = $request->file('img');
-        // $ext = $img->getClientOriginalExtension();
-        // $image = "course -" . uniqid() . ".$ext";
-        // $img->move(public_path("uploads/courses/"), $image);
-        $image = cloudinary()->upload($request->file('img')->getRealPath())->getSecurePath();
-
-        $course = Course::create([
-            'name' => $request->name,
-            'img' => $image,
-            'category_id' => $request->category_id,
-            'trainer_id' => $request->trainer_id,
-            'price' => $request->price,
-            'duration' => $request->duration,
-            'preq' => $request->preq,
-            'desc' => $request->desc,
-        ]);
-
-        if ($course) {
-            return response()->json($course, 200);
-        }
-
-        return response()->json("Cannot add this course", 400);
+{
+    $validation = $this->validation($request);
+    if ($validation instanceof Response) {
+        return $validation;
     }
+
+    if ($request->hasFile('img')) {
+        $image = cloudinary()->upload($request->file('img')->getRealPath())->getSecurePath();
+    } else {
+        // Handle the case when no file is uploaded
+        $image = null;
+    }
+
+    $course = Course::create([
+        'name' => $request->name,
+        'img' => $image,
+        'category_id' => $request->category_id,
+        'trainer_id' => $request->trainer_id,
+        'price' => $request->price,
+        'duration' => $request->duration,
+        'preq' => $request->preq,
+        'desc' => $request->desc,
+    ]);
+
+    if ($course) {
+        return response()->json($course, 200);
+    }
+
+    return response()->json("Cannot add this course", 400);
+}
+
+
 
 
 
@@ -243,35 +278,67 @@ class CourseController extends Controller
 
 
 
+    // public function Enrollment(Request $request)
+    // {
+    //     $enrolle = DB::table('course_student')->insert([
+    //         'student_id' => $request->student_id,
+    //         'course_id' => $request->course_id,
+    //     ]);
+
+    //     $course=Course::find($request->course_id);
+    //     $course_name=$course->name;
+    //     if ($enrolle) {
+    //         // $course= DB::select("select name from courses where id = $request->course_id");
+    //         $details = [
+    //             'title' => 'Congratulations',
+    //             'body' => "You have enrolled successfully $course_name ",
+    //         ];
+
+    //         // $email = DB::select("select email from students where id = $request->student_id");
+
+    //         // Mail::to($email)->send(new welcomemail($details));
+
+    //         return response()->json($enrolle, 200);
+    //     }
+
+    //     return response()->json("Cannot add this course", 400);
+    // }
+
+
+
+
+
+
     public function Enrollment(Request $request)
-    {
-        $enrolle = DB::table('course_student')->insert([
-            'student_id' => $request->student_id,
-            'course_id' => $request->course_id,
-        ]);
+{
+    $enrollment = DB::table('course_student')
+        ->where('student_id', $request->student_id)
+        ->where('course_id', $request->course_id)
+        ->first();
 
-        $course=Course::find($request->course_id);
-        $course_name=$course->name;
-        if ($enrolle) {
-            // $course= DB::select("select name from courses where id = $request->course_id");
-            $details = [
-                'title' => 'Congratulations',
-                'body' => "You have enrolled successfully $course_name ",
-            ];
-
-            // $email = DB::select("select email from students where id = $request->student_id");
-
-            // Mail::to($email)->send(new welcomemail($details));
-
-            return response()->json($enrolle, 200);
-        }
-
-        return response()->json("Cannot add this course", 400);
+    if ($enrollment) {
+        return response()->json("Student is already enrolled in this course", 400);
     }
 
+    DB::table('course_student')->insert([
+        'student_id' => $request->student_id,
+        'course_id' => $request->course_id,
+    ]);
 
+    $course = Course::find($request->course_id);
+    $course_name = $course->name;
 
+    $details = [
+        'title' => 'Congratulations',
+        'body' => "You have enrolled successfully in $course_name",
+    ];
 
+    // Send the email notification to the student
+    // $email = DB::select("select email from students where id = $request->student_id");
+    // Mail::to($email)->send(new welcomemail($details));
+
+    return response()->json("Enrollment successful", 200);
+}
 
 
 
