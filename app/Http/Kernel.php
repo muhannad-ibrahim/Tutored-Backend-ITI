@@ -59,7 +59,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'cors' => \App\Http\Middleware\Cors::class,
         'adminOrStudent' => \App\Http\Middleware\adminOrStudent::class,
-        'studentAdmin' => \App\Http\Middleware\studentIstrainr::class,
+        'studentOrTrainer' => \App\Http\Middleware\studentOrTrainer::class,
         'isAdminIstrainr' => \App\Http\Middleware\isAdminIstrainr::class,
         'checkTrainer' => \App\Http\Middleware\checkTrainer::class,
         'checkStudent' => \App\Http\Middleware\checkStudent::class,

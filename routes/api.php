@@ -61,7 +61,6 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
 });
 
-
 // routes for trainer
 Route::get('/trainers', [TrainerController::class, 'index']);
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
@@ -93,9 +92,12 @@ Route::post('/studentcourseenroll', [CourseController::class, 'course_student_en
 
 Route::middleware('adminOrStudent:students,api')->group(function () {
     Route::delete('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'destroy']);
+    Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
+});
+
+Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/courses/{courseId}/exams', [ExamController::class, 'getAllCourseExams']);
     Route::get('/courses/{courseId}/exams-with-questions', [ExamController::class, 'getAllCourseExamsWithQuestions']);
-    Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);

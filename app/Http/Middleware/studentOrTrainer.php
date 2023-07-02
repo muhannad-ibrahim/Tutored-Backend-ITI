@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
-class studentIstrainr
+class studentOrTrainer
 {
     /**
      * Handle an incoming request.
@@ -28,12 +28,12 @@ class studentIstrainr
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json('Expired Exception');
             } else {
-                return response()->json('please login and return go to request ');
+                return response()->json('please login and return go to request');
             }
         }
         return $next($request);
     }
-    return response()->json('please login  ');
+    return response()->json('please login');
 }
 
 }
