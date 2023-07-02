@@ -17,6 +17,8 @@ use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\ChatMessageController;
 use App\Events\ChatMessageSent;
 use App\Models\Trainer;
+use App\Http\Controllers\PrivateChatController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -148,7 +150,6 @@ Route::post('chat/send-message', [ChatMessageController::class, 'sendMessage']);
 
 //     return response()->json(['success' => true]);
 // });
-
 
 
 

@@ -51,23 +51,31 @@ use App\Models\Trainer;
 // });
 
 
-Broadcast::channel('chat.{studentId}.{trainerId}', function ($user, $studentId, $trainerId) {
-    // Implement your authorization logic here
-    // For example, check if the user is the student or the trainer
-    // You may need to adjust this logic based on your application's authentication and user model setup
+// Broadcast::channel('chat.{studentId}.{trainerId}', function ($user, $studentId, $trainerId) {
+//     // Implement your authorization logic here
+//     // For example, check if the user is the student or the trainer
+//     // You may need to adjust this logic based on your application's authentication and user model setup
 
-    if ($user instanceof \App\Models\Student && $user->id === (int) $studentId) {
-        return true;
-    }
+//     if ($user instanceof \App\Models\Student && $user->id === (int) $studentId) {
+//         return true;
+//     }
 
-    if ($user instanceof \App\Models\Trainer && $user->id === (int) $trainerId) {
-        return true;
-    }
+//     if ($user instanceof \App\Models\Trainer && $user->id === (int) $trainerId) {
+//         return true;
+//     }
 
-    return false;
+//     return false;
+// });
+
+
+
+Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+    // Add your authorization logic here to ensure the user can access the chat
+    return true; // or false based on your requirements
 });
 
-
-
-
+Broadcast::channel('private-chat.{adminId}.{studentId}', function ($user, $adminId, $studentId) {
+    // Add your authorization logic here to ensure the user can access the private chat
+    return $user->isAdmin() && $user->id === $adminId || $user->isStudent() && $user->id === $studentId;
+});
 
