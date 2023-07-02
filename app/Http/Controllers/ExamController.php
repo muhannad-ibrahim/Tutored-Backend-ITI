@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ExamController extends Controller
 {
@@ -226,7 +227,7 @@ class ExamController extends Controller
     public function storeExamDegree(Request $request, $courseId, $examId)
     {
         $student = Auth::guard('students')->user();
-        
+    
         $enrollment = DB::table('course_student')
             ->where('course_id', $courseId)
             ->where('student_id', $student->id)
@@ -234,33 +235,52 @@ class ExamController extends Controller
         if (!$enrollment) {
             return response()->json(['message' => 'You are not enrolled in this course.'], 403);
         }
-        
+    
         $exam = Exam::find($examId);
         if (!$exam) {
             return response()->json(['message' => 'Exam not found.'], 404);
         }
-
+    
         $course = Course::find($courseId);
         if (!$course) {
             return response()->json(['message' => 'Course not found.'], 404);
         }
-        
+    
         $validator = Validator::make($request->all(), [
             'degree' => 'required|numeric|min:0',
         ]);
-        
+    
         if ($validator->fails()) {
             return response()->json(['message' => 'Validation failed.', 'errors' => $validator->errors()], 422);
         }
-        
+    
         $degree = $request->input('degree');
-        
-        DB::table('student_subject_exam')->insert([
-            'degree' => $degree,
-            'exam_id' => $exam->id,
-            'student_id' => $student->id,
-        ]);
-        
+    
+        // Check if the user has already taken an exam for the same course
+        $existingExam = DB::table('student_subject_exam')
+            ->where('exam_id', $exam->id)
+            ->where('student_id', $student->id)
+            ->first();
+    
+        if ($existingExam) {
+            // Update the existing exam record
+            DB::table('student_subject_exam')
+                ->where('exam_id', $exam->id)
+                ->where('student_id', $student->id)
+                ->update([
+                    'degree' => $degree,
+                    'updated_at' => Carbon::now()
+                ]);        } else {
+            // Insert a new exam record
+            DB::table('student_subject_exam')->insert([
+                'degree' => $degree,
+                'exam_id' => $exam->id,
+                'student_id' => $student->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+        }
+    
         return response()->json(['message' => 'Exam degree stored successfully.'], 200);
     }
 
