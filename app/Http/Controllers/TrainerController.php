@@ -169,9 +169,9 @@ class TrainerController extends Controller
             'fname' => 'required|min:3|max:20',
             'lname' => 'required|min:3|max:20',
             'gender' => 'required',
-            'phone' => 'required|unique:trainers',
+            'phone' => 'required|unique:trainers|min:10|max:13',
             'email' => 'required|email|unique:trainers',
-            'password' => 'required|min:6'
+            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
         ]);
     }
 
