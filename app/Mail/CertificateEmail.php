@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class CertificateEmail extends Mailable
 {
@@ -24,6 +25,7 @@ class CertificateEmail extends Mailable
         return $this->view('emails.certificate')
                     ->with('student_name', $this->certificateData['student_name'])
                     ->with('course_name', $this->certificateData['course_name'])
+                    ->with('completion_date', $this->certificateData['completion_date'])
                     ->attachData($pdf, 'certificate.pdf', [
                         'mime' => 'application/pdf',
                     ]);
@@ -33,7 +35,10 @@ class CertificateEmail extends Mailable
     {
         $html = view('emails.certificatePdf', $this->certificateData)->render();
 
-        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('chroot', public_path());
+
+        $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
