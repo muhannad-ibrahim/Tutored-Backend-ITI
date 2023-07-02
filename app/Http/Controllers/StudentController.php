@@ -56,7 +56,7 @@ class StudentController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        
+
         if ($students) {
             event(new Registered($students));
             return $this->createdResponse($students);
@@ -176,6 +176,16 @@ class StudentController extends Controller
     public function me()
     {
         return response()->json(auth()->guard('students')->user());
+    }
+
+
+    public function getCoursesByStudentId($id)
+    {
+
+        $courses = Student::with('courses')->find($id);
+        if ($courses)
+            return response()->json($courses, 200);
+        else return response()->json("No courses for this student");
     }
 
     public function logout()

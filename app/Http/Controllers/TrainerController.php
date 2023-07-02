@@ -28,7 +28,7 @@ class TrainerController extends Controller
             return $validation;
         }
 
-        $img=$request->file('img'); 
+        $img=$request->file('img');
         $ext=$img->getClientOriginalExtension();
         $image="train -".uniqid().".$ext";
         $img->move(public_path("uploads/trainer/"),$image);
@@ -53,6 +53,16 @@ class TrainerController extends Controller
             'message' => "can't create trainer",
         ], 404);
     }
+
+
+
+    public function getCoursesByTrainerId($id){
+        $courses = Trainer::with('courses')->find($id);
+        if ($courses)
+            return response()->json($courses, 200);
+        else return response()->json("No courses for this trainer");
+    }
+    
 
     public function register(Request $request)
     {
@@ -110,7 +120,7 @@ class TrainerController extends Controller
             if($img_name !== null)
             {
                 $path_parts = pathinfo(basename($img_name));
-                
+
                 Cloudinary::destroy($path_parts['filename']);
             }
             $img_name = Cloudinary::upload($request->file('img')->getRealPath())->getSecurePath();
@@ -140,11 +150,11 @@ class TrainerController extends Controller
         $trainer = Trainer::find($id);
         if ($trainer) {
             $img_name = $trainer->img;
-    
+
             if ($img_name !== null) {
-               
+
             $path_parts = pathinfo(basename($img_name));
-                    
+
               Cloudinary::destroy($path_parts['filename']);
             }
             $trainer->delete();
