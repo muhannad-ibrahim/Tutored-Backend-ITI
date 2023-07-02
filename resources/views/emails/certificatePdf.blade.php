@@ -27,7 +27,7 @@
         }
 
         .student-name {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: bold;
             margin-bottom: 40px;
             color: #333333;
@@ -44,6 +44,11 @@
             color: #444444;
         }
 
+        .completion-date {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
         .signature {
             font-size: 18px;
             font-style: italic;
@@ -52,21 +57,22 @@
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 160px;
+            height: 70px;
             margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="certificate-wrapper">
-        <img class="logo" src="{{ public_path('images/certificate_logo.png') }}" alt="Certificate Logo">
+        <img class="logo" src="{{ public_path('logo.jpg') }}" alt="Certificate Logo">
         <h1 class="certificate-title">Certificate of Completion</h1>
-        <p class="student-name">Dear {{ $student_name }},</p>
-        <p class="message">Congratulations! You have successfully completed the course:</p>
+        <p class="student-name">{{ $student_name }}</p>
+        <p class="message">Has successfully completed the course:</p>
         <p class="course-name">{{ $course_name }}</p>
-        <p class="message">We acknowledge your dedication and commitment to learning.</p>
-        <p class="signature">Best regards,<br> The Tutored Team</p>
+        <p class="completion-date">Completed on {{ $completion_date }}</p>
+        <p class="message">We hereby acknowledge that you have successfully completed all the requirements and assessments of the course. Your dedication and hard work are commendable.</p>
+        <p class="signature"> Signature:<br> The Tutored Team</p>
     </div>
 </body>
 </html>

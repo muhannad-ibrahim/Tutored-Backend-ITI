@@ -67,9 +67,6 @@
 </head>
 <body>
     <div class="certificate">
-        <div class="logo">
-            <img src="{{ asset('path/to/tutored-logo.png') }}" alt="Tutored Logo">
-        </div>
         <h1>Certificate of Completion</h1>
         <p class="student-name">Dear {{ $student_name }},</p>
         <p class="course-name">Congratulations on completing the course:</p>

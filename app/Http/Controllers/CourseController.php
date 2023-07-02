@@ -14,6 +14,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CertificateEmail;
+use Illuminate\Support\Facades\View;
 
 class CourseController extends Controller
 {
@@ -346,19 +347,19 @@ class CourseController extends Controller
             ->join('exams', 'student_subject_exam.exam_id', '=', 'exams.id')
             ->where('exams.course_id', $courseId)
             ->where('student_subject_exam.student_id', $student->id)
-            ->select('student_subject_exam.degree')
+            ->select('student_subject_exam.degree', 'student_subject_exam.updated_at')
             ->first();
 
             if ($examDegree && $examDegree->degree >= 70) {
                 // Generate the certificate and send it to the student's email
                 $certificateData = [
-                    'student_name' => $student->fname,
+                    'student_name' => $student->fname . ' ' . $student->lname,
                     'course_name' => $course->name,
+                    'completion_date' => date('F d, Y', strtotime($examDegree->updated_at)),
                 ];
-                
+
                 // Send the certificate email
                 Mail::to($student->email)->send(new CertificateEmail($certificateData));
-
                 return response()->json([
                     'message' => 'Congratulations! You have completed the course. The certificate has been sent to your email.',
                 ], 200);
