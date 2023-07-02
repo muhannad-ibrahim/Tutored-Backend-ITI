@@ -13,6 +13,21 @@ return [
         'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
     ],
 
+    'channels' => [
+        'private-chat.student.{studentId}' => [
+            'name' => 'private-chat.student.{studentId}',
+            'authorize' => true,
+            'capacity' => null,
+            'middleware' => [],
+        ],
+        'private-chat.trainer.{trainerId}' => [
+            'name' => 'private-chat.trainer.{trainerId}',
+            'authorize' => true,
+            'capacity' => null,
+            'middleware' => [],
+        ],
+    ],
+
     /*
      * This package comes with multi tenancy out of the box. Here you can
      * configure the different apps that can use the webSockets server.
@@ -58,7 +73,7 @@ return [
             'enable_statistics' => true,
         ],
     ],
-    
+
 
     /*
      * This class is responsible for finding the apps. The default provider

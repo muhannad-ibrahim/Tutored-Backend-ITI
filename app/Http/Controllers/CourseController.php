@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ApiResponseTrait;
 use App\Models\Course;
-use App\Models\Course_Content;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Mail\welcomemail;
-use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Support\Facades\Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CertificateEmail;
 
 class CourseController extends Controller
 {
     use ApiResponseTrait;
 
+  
 
     public function index()
     {
@@ -339,12 +340,106 @@ class CourseController extends Controller
 
     return response()->json("Enrollment successful", 200);
 }
+    public function updateProgress(Request $request, $courseId)
+    {
+        $student = Auth::guard('students')->user();
 
+        $validator = Validator::make($request->all(), [
+            'progress' => 'required|integer|min:0|max:100',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
+        $validatedData = $validator->validated();
 
+        $studentCourse = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->first();
 
+        if (!$studentCourse) {
+            return response()->json([
+                'message' => 'Course not found for the specified student.',
+            ], 404);
+        }
 
+        DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $studentCourse->course_id)
+            ->update(['progress' => $validatedData['progress']]);
+
+        return response()->json([
+            'message' => 'Course progress updated successfully.',
+        ], 200);
+    }
+
+    public function getProgress($courseId)
+    {
+        $student = Auth::guard('students')->user();
+
+        $studentCourse = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->first();
+
+        if (!$studentCourse) {
+            return response()->json([
+                'message' => 'Course not found for the specified student.',
+            ], 404);
+        }
+
+        return response()->json([
+            'progress' => $studentCourse->progress,
+        ], 200);
+    }
+
+    public function completeCourse($courseId)
+    {
+        $student = Auth::guard('students')->user();
+
+        $progress = DB::table('course_student')
+            ->where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->value('progress');
+
+        if ($progress == 100) {
+            $course = DB::table('courses')
+            ->where('id', $courseId)
+            ->select('name')
+            ->first();
+
+            $examDegree = DB::table('student_subject_exam')
+            ->join('exams', 'student_subject_exam.exam_id', '=', 'exams.id')
+            ->where('exams.course_id', $courseId)
+            ->where('student_subject_exam.student_id', $student->id)
+            ->select('student_subject_exam.degree')
+            ->first();
+
+            if ($examDegree && $examDegree->degree >= 70) {
+                // Generate the certificate and send it to the student's email
+                $certificateData = [
+                    'student_name' => $student->fname,
+                    'course_name' => $course->name,
+                ];
+
+                // Send the certificate email
+                Mail::to($student->email)->send(new CertificateEmail($certificateData));
+
+                return response()->json([
+                    'message' => 'Congratulations! You have completed the course. The certificate has been sent to your email.',
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Course completion criteria not met.',
+        ], 400);
+    }
 
      public function validation($request)
     {

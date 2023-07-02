@@ -15,6 +15,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\ChatMessageController;
+use App\Events\ChatMessageSent;
+use App\Models\Trainer;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,12 +35,16 @@ Route::post('login', [AuthController::class, 'login']);
 //get categories count
 //get categories
 Route::get('/categories', [CategoryController::class, 'index']);
-//get categories by id
+//get categories count
 Route::get('/categories/count',[CategoryController::class,'getCount']);
+//get categories by id
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->where('id', '[0-9]+');
 // get courses of specific category
 Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategoryCourses']);
+
 // routes for student
+Route::get('/students',[StudentController::class, 'index']);
+Route::get('/students/{id}',[StudentController::class, 'show']);
 Route::post('/student/register',[StudentController::class,'register']);
 Route::post('/student/login', [StudentController::class, 'login']);
 
@@ -53,11 +59,18 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('courses/{courseId}/exams/{examId}', [ExamController::class, 'showExam']);
     Route::post('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'storeExamDegree']);
     Route::get('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'getExamDegree']);
+    Route::put('/courses/{courseId}/progress', [CourseController::class, 'updateProgress']);
+    Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
+    Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
+
+
 });
 
 Route::get('/students/count',[StudentController::class,'getCount']);
 
 // routes for trainer
+Route::get('/trainers', [TrainerController::class, 'index']);
+Route::get('/trainers/{id}', [TrainerController::class, 'show']);
 Route::post('/trainers/register', [TrainerController::class, 'register']);
 Route::post('/trainers/login', [TrainerController::class, 'login']);
 
@@ -74,6 +87,8 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::post('/exams/{examId}/questions', [QuestionController::class, 'store']);
     Route::put('questions/{questionId}', [QuestionController::class, 'update']);
     Route::delete('questions/{questionId}', [QuestionController::class, 'destroy']);
+
+
 });
 
 Route::get('/trainers/count',[TrainerController::class,'getCount']);
@@ -120,3 +135,34 @@ Route::post('/email/verify/resend', function (Request $request) {
 
 
 Route::post('chat/send-message', [ChatMessageController::class, 'sendMessage']);
+
+
+
+// Route::post('chat/message', function (Request $request) {
+//     $message = $request->input('message');
+//     $studentId = $request->input('student_id');
+//     $trainerId = $request->input('trainer_id');
+
+//     // Trigger the ChatMessageSent event
+//     event(new ChatMessageSent($message, $studentId, $trainerId));
+
+//     return response()->json(['success' => true]);
+// });
+
+
+
+
+Route::post('/chat/message', function (Request $request) {
+    $message = $request->input('message');
+    $studentId = $request->input('student_id');
+    $trainerId = $request->input('trainer_id');
+
+    // Trigger the ChatMessageSent event
+    event(new ChatMessageSent($message, $studentId, $trainerId));
+
+    return response()->json(['success' => true]);
+});
+
+
+
+

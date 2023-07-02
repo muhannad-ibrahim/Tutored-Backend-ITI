@@ -20,10 +20,13 @@ class ChatMessageSent implements ShouldBroadcast
      * @return void
      */
     public $message;
-
-    public function __construct($message)
+    public $studentId;
+    public $trainerId;
+    public function __construct($message, $studentId, $trainerId)
     {
         $this->message = $message;
+        $this->studentId = $studentId;
+        $this->trainerId = $trainerId;
     }
 
     /**
@@ -31,10 +34,27 @@ class ChatMessageSent implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
-    {
-        return new Channel('chat');
-    }
+    // public function broadcastOn()
+    // {
+    //     return new Channel('chat');
+    // }
 
+    public function broadcastOn()
+{
+    return [
+        new PrivateChannel('private-chat.student.' . $this->studentId),
+        new PrivateChannel('private-chat.trainer.' . $this->trainerId),
+    ];
+}
+
+
+public function broadcastWith()
+{
+    return [
+        'message' => $this->message,
+        'student_id' => $this->studentId,
+        'trainer_id' => $this->trainerId,
+    ];
+}
 
 }

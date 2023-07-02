@@ -115,31 +115,31 @@ class CategoryController extends Controller
     }
 
 
-    // public function getCount()
-    // {
-    //     $data = DB::table('categories')->select('id')->count('id');
-    //     if ($data == 0)
-    //         return response()->json($data, 200);
-    //     if ($data) {
-    //         return response()->json($data, 200);
-    //     }
-    //     return response()->json("Not Found", 404);
-    // }
-
-
     public function getCount()
-{
-    dd('fdsfsdf');
-    // $count = DB::table('categories')->count();
+    {
+        $data = DB::table('categories')->select('id')->count('id');
+        if ($data == 0)
+            return response()->json($data, 200);
+        if ($data) {
+            return response()->json($data, 200);
+        }
+        return response()->json("Not Found", 404);
+    }
 
 
-    // dd($count);
-    // if ($count > 0) {
-    //     return response()->json($count, 200);
-    // } else {
-    //     return response()->json("Not Found", 404);
-    // }
-}
+//     public function getCount()
+// {
+//     dd('fdsfsdf');
+//     // $count = DB::table('categories')->count();
+
+
+//     // dd($count);
+//     // if ($count > 0) {
+//     //     return response()->json($count, 200);
+//     // } else {
+//     //     return response()->json("Not Found", 404);
+//     // }
+// }
 
 
 
