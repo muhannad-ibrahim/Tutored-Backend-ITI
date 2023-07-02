@@ -155,7 +155,7 @@ class ExamController extends Controller
 
     public function showExam($courseId, $examId)
     {
-        $student = Auth::user();
+        $student = Auth::guard('students')->user();
 
         $enrollment = DB::table('course_student')
         ->where('course_id', $courseId)
