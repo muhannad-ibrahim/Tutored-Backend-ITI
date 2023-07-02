@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionController;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactUsController;
@@ -43,7 +44,7 @@ Route::get('/students',[StudentController::class, 'index']);
 Route::get('/students/count',[StudentController::class,'getCount']);
 Route::get('/students/{id}',[StudentController::class, 'show']);
 Route::post('/student/register',[StudentController::class,'register']);
-Route::post('/student/login', [StudentController::class, 'login']);
+Route::post('/student/login', [StudentController::class, 'login'])->middleware('verify-email');
 
 Route::middleware('checkStudent:students')->group(function () {
     Route::post('/student/me', [StudentController::class, 'me']);
@@ -122,6 +123,15 @@ Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke
 
 // Resend link to verify email
 Route::post('/email/verify/resend', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth:api', 'throttle:6,1'])->name('verification.send');
+    $credentials = $request->only('email', 'password');
+    $user = Student::where('email', $credentials['email'])->first();
+
+    if ($user) {
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email is already verified.'], 200);
+        }
+
+        $user->sendEmailVerificationNotification();
+        return response()->json(['message' => 'Verification link sent!'], 200);
+    }
+})->middleware(['throttle:6,1'])->name('verification.send');
