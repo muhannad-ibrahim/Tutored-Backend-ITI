@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Broadcast;
 use App\Models\Student;
 use App\Models\Trainer;
+use App\Channels\PrivateChatChannel;
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -69,13 +71,14 @@ use App\Models\Trainer;
 
 
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    // Add your authorization logic here to ensure the user can access the chat
-    return true; // or false based on your requirements
-});
+// Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+//     // Add your authorization logic here to ensure the user can access the chat
+//     return true; // or false based on your requirements
+// });
 
-Broadcast::channel('private-chat.{adminId}.{studentId}', function ($user, $adminId, $studentId) {
-    // Add your authorization logic here to ensure the user can access the private chat
-    return $user->isAdmin() && $user->id === $adminId || $user->isStudent() && $user->id === $studentId;
-});
+// Broadcast::channel('private-chat.{adminId}.{studentId}', function ($user, $adminId, $studentId) {
+//     // Add your authorization logic here to ensure the user can access the private chat
+//     return $user->isAdmin() && $user->id === $adminId || $user->isStudent() && $user->id === $studentId;
+// });
 
+Broadcast::channel('private-chat.{userId}.{studentId}', PrivateChatChannel::class);

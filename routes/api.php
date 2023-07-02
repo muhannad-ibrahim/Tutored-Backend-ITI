@@ -18,6 +18,7 @@ use App\Http\Controllers\ChatMessageController;
 use App\Events\ChatMessageSent;
 use App\Models\Trainer;
 use App\Http\Controllers\PrivateChatController;
+use App\Http\Controllers\ChatController;
 
 
 /*
@@ -151,6 +152,9 @@ Route::post('chat/send-message', [ChatMessageController::class, 'sendMessage']);
 //     return response()->json(['success' => true]);
 // });
 
+
+
+Route::post('chat/send', [ChatController::class, 'sendMessage']);
 
 
 Route::post('/chat/message', function (Request $request) {
