@@ -40,6 +40,7 @@ Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategory
 
 // routes for student
 Route::get('/students',[StudentController::class, 'index']);
+Route::get('/students/count',[StudentController::class,'getCount']);
 Route::get('/students/{id}',[StudentController::class, 'show']);
 Route::post('/student/register',[StudentController::class,'register']);
 Route::post('/student/login', [StudentController::class, 'login']);
@@ -60,10 +61,10 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
 });
 
-Route::get('/students/count',[StudentController::class,'getCount']);
 
 // routes for trainer
 Route::get('/trainers', [TrainerController::class, 'index']);
+Route::get('/trainers/count',[TrainerController::class,'getCount']);
 Route::get('/trainers/{id}', [TrainerController::class, 'show']);
 Route::post('/trainers/register', [TrainerController::class, 'register']);
 Route::post('/trainers/login', [TrainerController::class, 'login']);
@@ -82,8 +83,6 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::put('questions/{questionId}', [QuestionController::class, 'update']);
     Route::delete('questions/{questionId}', [QuestionController::class, 'destroy']);
 });
-
-Route::get('/trainers/count',[TrainerController::class,'getCount']);
 
 //get courses count
 Route::get('/courses/count',[CourseController::class,'getCount']);
