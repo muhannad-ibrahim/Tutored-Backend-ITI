@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Certificate;
+use Illuminate\Support\Facades\Redirect;
 
 class CertificateController extends Controller
 {
@@ -15,9 +16,11 @@ class CertificateController extends Controller
             ->first();
 
         if ($certificate) {
-            return response()->json(['message' => 'Verified'], 200);
+            return redirect(env('FRONT_URL') . '/main/login/student');
+            // return response()->json(['message' => 'Verified'], 200);
         } else {
-            return response()->json(['message' => 'Unverified'], 200);
+            return redirect(env('FRONT_URL') . '/main/login/student');
+            // return response()->json(['message' => 'Unverified'], 200);
         }
     }
 }

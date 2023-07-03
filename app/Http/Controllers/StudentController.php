@@ -181,11 +181,15 @@ class StudentController extends Controller
 
     public function getCoursesByStudentId($id)
     {
-
-        $courses = Student::with('courses')->find($id);
-        if ($courses)
+        $student = Student::with('courses')->find($id);
+    
+        if ($student) {
+            $courses = $student->courses;
+    
             return response()->json($courses, 200);
-        else return response()->json("No courses for this student");
+        }
+    
+        return response()->json("No courses found for this student", 404);
     }
 
     public function logout()
