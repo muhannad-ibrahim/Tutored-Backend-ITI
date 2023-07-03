@@ -15,6 +15,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\VerifyEmailController;
+use App\Http\Controllers\CertificateController;
 
 /*
 |--------------------------------------------------------------------------

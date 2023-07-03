@@ -21,12 +21,15 @@ class CertificateEmail extends Mailable
 
     public function build()
     {
+        // dd($this->certificateData['student_name']);
         $pdf = $this->generateCertificatePdf();
         return $this->view('emails.certificate')
                     ->with('student_name', $this->certificateData['student_name'])
                     ->with('course_name', $this->certificateData['course_name'])
                     ->with('completion_date', $this->certificateData['completion_date'])
                     ->with('verification_number', $this->certificateData['verification_number'])
+                    ->with('student_id', $this->certificateData['student_id'])
+                    ->with('course_id', $this->certificateData['course_id'])
                     ->attachData($pdf, 'certificate.pdf', [
                         'mime' => 'application/pdf',
                     ]);
