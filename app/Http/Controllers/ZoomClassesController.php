@@ -27,6 +27,7 @@ class ZoomClassesController extends Controller
         try {
             $zoomMeeting = zoom_class::create([
                 'trainer_id' => Auth::guard('trainers')->user()->id,
+                'course_id' => $request->course_id,
                 'meeting_id' => $request->meeting_id,
                 'topic' => $request->topic,
                 'start_at' => $request->start_time,
