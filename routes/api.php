@@ -61,6 +61,11 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
     Route::get('/student/courses/{id}',[StudentController::class,'getCoursesByStudentId']);
+    Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
+    //show courses by student id
+    Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
+    //enroll
+    Route::post('/student/storeCourse',[CourseController::class,'Enrollment']);
 });
 
 // routes for trainer

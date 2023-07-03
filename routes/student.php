@@ -9,14 +9,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseContentController;
 use App\Http\Controllers\TrainerController;
 
-//show courses by student id
-Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
-//enroll
-Route::post('/student/storeCourse',[CourseController::class,'Enrollment']);
+
 //show Course content by Course id
-Route::get('/Course_content/show/{c_id}', [CourseController::class, 'showvideo']);
 
-Route::get('/Course_content', [CourseContentController::class, 'index']);
-Route::get('/Course_content/{id}', [CourseContentController::class, 'show']);
-
+Route::get('/course_content', [CourseContentController::class, 'index']);
+Route::get('/course_content/{id}', [CourseContentController::class, 'show']);
 Route::get('/trainer/courses/{id}',[TrainerController::class,'getCoursesByTrainerId']);
