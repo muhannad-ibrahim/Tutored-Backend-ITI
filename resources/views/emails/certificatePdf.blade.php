@@ -61,6 +61,11 @@
             height: 70px;
             margin-bottom: 20px;
         }
+
+        .verification-number {
+            font-size: 14px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -73,6 +78,7 @@
         <p class="completion-date">Completed on {{ $completion_date }}</p>
         <p class="message">We hereby acknowledge that you have successfully completed all the requirements and assessments of the course. Your dedication and hard work are commendable.</p>
         <p class="signature"> Signature:<br> The Tutored Team</p>
+        <p class="verification-number">Verification Number: <a href="{{ route('verify.certificate', ['studentId' => $student_id, 'courseId' => $course_id, 'verificationNumber' => $verification_number]) }}">{{ $verification_number }}</a></p>
     </div>
 </body>
 </html>

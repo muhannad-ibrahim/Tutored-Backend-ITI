@@ -351,6 +351,22 @@ class CourseController extends Controller
             ->first();
 
             if ($examDegree && $examDegree->degree >= 70) {
+                // Check if the certificate already exists for the student and course
+                $certificate = DB::table('certificates')
+                ->where('student_id', $student->id)
+                ->where('course_id', $courseId)
+                ->first();
+
+                if (!$certificate) {
+                    $verificationNumber = uniqid();
+                }
+
+                DB::table('certificates')->insert([
+                    'student_id' => $student->id,
+                    'course_id' => $courseId,
+                    'verification_number' => $verificationNumber,
+                ]);
+
                 // Generate the certificate and send it to the student's email
                 $certificateData = [
                     'student_name' => $student->fname . ' ' . $student->lname,

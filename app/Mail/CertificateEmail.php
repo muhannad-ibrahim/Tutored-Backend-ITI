@@ -26,6 +26,7 @@ class CertificateEmail extends Mailable
                     ->with('student_name', $this->certificateData['student_name'])
                     ->with('course_name', $this->certificateData['course_name'])
                     ->with('completion_date', $this->certificateData['completion_date'])
+                    ->with('verification_number', $this->certificateData['verification_number'])
                     ->attachData($pdf, 'certificate.pdf', [
                         'mime' => 'application/pdf',
                     ]);
