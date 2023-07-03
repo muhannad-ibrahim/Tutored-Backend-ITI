@@ -156,6 +156,7 @@ Route::post('chat/send-message', [ChatMessageController::class, 'sendMessage']);
 
 Route::post('chat/send', [ChatController::class, 'sendMessage']);
 
+Route::get('/messages', [ChatController::class, 'getMessages']);
 
 Route::post('/chat/message', function (Request $request) {
     $message = $request->input('message');

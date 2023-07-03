@@ -10,50 +10,27 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Trainer;
 
 class PrivateChatChannel implements ShouldBroadcast
 {
-    /**
-     * The user instance.
-     *
-     * @var User
-     */
-    public $user;
-
-    /**
-     * The student instance.
-     *
-     * @var Student
-     */
+    public $trainer;
     public $student;
 
-    /**
-     * Create a new channel instance.
-     *
-     * @param  User  $user
-     * @param  Student  $student
-     * @return void
-     */
-    public function __construct(User $user, Student $student)
+    public function __construct(Student $student,Trainer $trainer)
     {
-        $this->user = $user;
+        $this->trainer = $trainer;
         $this->student = $student;
     }
 
-    /**
-     * Authenticate the user's access to the channel.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|bool
-     */
     public function join($request)
     {
         try {
-            $user = User::findOrFail($this->user->id);
+            $trainer = Trainer::findOrFail($this->trainer->id);
             $student = Student::findOrFail($this->student->id);
 
-            if ($user->id === $student->user_id) {
-                return new PrivateChannel('private-chat.'.$user->id.'.'.$student->id);
+            if ($trainer->id === $student->trainer_id) {
+                return new PrivateChannel('private-chat.'.$trainer->id.'.'.$student->id);
             } else {
                 throw new AuthorizationException();
             }
@@ -62,19 +39,14 @@ class PrivateChatChannel implements ShouldBroadcast
         }
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
-        return new PrivateChannel('private-chat.'.$this->user->id.'.'.$this->student->id);
+        return new PrivateChannel('private-chat.'.$this->trainer->id.'.'.$this->student->id);
     }
-    public function __toString()
-{
-    return 'private-chat.'.$this->user->id.'.'.$this->student->id;
-}
 
+    public function __toString()
+    {
+        return 'private-chat.'.$this->trainer->id.'.'.$this->student->id;
+    }
 
 }

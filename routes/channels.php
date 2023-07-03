@@ -82,3 +82,5 @@ use App\Channels\PrivateChatChannel;
 // });
 
 Broadcast::channel('private-chat.{userId}.{studentId}', PrivateChatChannel::class);
+
+Broadcast::routes(['middleware' => ['auth:students']]);

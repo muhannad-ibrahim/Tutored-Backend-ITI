@@ -13,6 +13,7 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\Student;
 use App\Channels\PrivateChatChannel;
+use App\Models\Trainer;
 
 
 class PrivateChatEvent  implements ShouldBroadcast
@@ -31,14 +32,12 @@ class PrivateChatEvent  implements ShouldBroadcast
     *
     * @var Student
     */
-   public $student;
 
    /**
     * The message content.
     *
     * @var string
     */
-   public $message;
 
    /**
     * Create a new event instance.
@@ -48,32 +47,24 @@ class PrivateChatEvent  implements ShouldBroadcast
     * @param  string  $message
     * @return void
     */
-   public function __construct(User $user, Student $student, string $message)
-   {
-       $this->user = $user;
-       $this->student = $student;
-       $this->message = $message;
-   }
+    public $trainer;
+    public $student;
+    public $message;
 
-   /**
-    * Get the channels the event should broadcast on.
-    *
-    * @return array
-    */
-   public function broadcastOn()
-   {
-       return [
-           new PrivateChatChannel($this->user, $this->student),
-       ];
-   }
+    public function __construct(Student $student,Trainer $trainer,string $message)
+    {
+        $this->trainer = $trainer;
+        $this->student = $student;
+        $this->message = $message;
+    }
 
-   /**
-    * Get the broadcast event name.
-    *
-    * @return string
-    */
-   public function broadcastAs()
-   {
-       return 'message-sent';
-   }
+    public function broadcastOn()
+    {
+        return new PrivateChannel('private-chat.'.$this->trainer->id.'.'.$this->student->id);
+    }
+
+    public function broadcastAs()
+    {
+        return 'message-sent';
+    }
 }

@@ -6,30 +6,45 @@ use Illuminate\Http\Request;
 
 use App\Events\PrivateChatEvent;
 use App\Models\Chat;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
-
+use App\Models\Trainer;
 
 class ChatController extends Controller
 {
-    //
 
     public function sendMessage(Request $request)
     {
-        $user = auth()->user();
-        $studentId = $request->input('student_id');
+        if (!Auth::guard('students')->check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $student = Auth::guard('students')->user();
+        $trainerId = $request->input('trainer_id');
         $message = $request->input('message');
 
-        $student = Student::findOrFail($studentId);
+        $trainer = Trainer::findOrFail($trainerId);
 
         $chat = Chat::create([
-            'user_id' => $user->id,
             'student_id' => $student->id,
+            'trainer_id' => $trainer->id,
             'message' => $message,
         ]);
 
-        event(new PrivateChatEvent($user, $student, $message));
+        event(new PrivateChatEvent($student, $trainer, $message));
 
         return response()->json($chat);
     }
+
+    public function getMessages(Request $request)
+    {
+        $student = Auth::guard('students')->user();
+
+        $messages = Chat::where('student_id', $student->id)->get();
+
+        return response()->json($messages);
+    }
+    
+
 
 }
