@@ -160,11 +160,11 @@ class CourseController extends Controller
     }
 
 
-    public function showvideo($e_id)
+    public function showvideo($c_id)
     {
 
 
-        $course = DB::select("select * from course__contents where course_id = $e_id");
+        $course = DB::select("select * from course__contents where course_id = $c_id");
         if ($course) {
 
             return response()->json($course, 200);
