@@ -56,9 +56,9 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/courses/{course}/feedback',  [FeedbackController::class, 'store']);
     Route::patch('/courses/{courseId}/feedback/{feedbackId}', [FeedbackController::class, 'update']);
     Route::put('/courses/{course}/feedback/{feedback}', [FeedbackController::class, 'update']);
+    Route::get('/courses/{courseId}/exams/degree', [ExamController::class, 'getExamDegree']);
     Route::get('courses/{courseId}/exams/{examId}', [ExamController::class, 'showExam']);
     Route::post('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'storeExamDegree']);
-    Route::get('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'getExamDegree']);
     Route::put('/courses/{courseId}/progress', [CourseController::class, 'updateProgress']);
     Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
