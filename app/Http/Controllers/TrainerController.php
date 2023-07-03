@@ -197,7 +197,7 @@ class TrainerController extends Controller
         }
 
         $credentials = request(['email', 'password']);
-        if (!$token = auth()->guard('trainers')->attempt($credentials)) {
+        if (!$token = auth()->guard('trainers')->setTTL(28800)->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->respondWithToken($token);
