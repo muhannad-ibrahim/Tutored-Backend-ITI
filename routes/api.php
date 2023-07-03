@@ -60,6 +60,7 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::put('/courses/{courseId}/progress', [CourseController::class, 'updateProgress']);
     Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
+    Route::get('/student/courses/{id}',[StudentController::class,'getCoursesByStudentId']);
 });
 
 // routes for trainer

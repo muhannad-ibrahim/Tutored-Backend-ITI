@@ -19,6 +19,4 @@ Route::get('/Course_content/show/{c_id}', [CourseController::class, 'showvideo']
 Route::get('/Course_content', [CourseContentController::class, 'index']);
 Route::get('/Course_content/{id}', [CourseContentController::class, 'show']);
 
-
-Route::get('/student/courses/{id}',[StudentController::class,'getCoursesByStudentId']);
 Route::get('/trainer/courses/{id}',[TrainerController::class,'getCoursesByTrainerId']);
