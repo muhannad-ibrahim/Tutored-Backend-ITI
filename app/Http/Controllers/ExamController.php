@@ -284,7 +284,7 @@ class ExamController extends Controller
         return response()->json(['message' => 'Exam degree stored successfully.'], 200);
     }
 
-    public function getExamDegree($courseId)
+    public function getExamDegree($courseId, $examId)
     {
         $student = Auth::guard('students')->user();
     
@@ -294,7 +294,7 @@ class ExamController extends Controller
         ->join('courses', 'exams.course_id', '=', 'courses.id')
         ->select('student_subject_exam.degree', 'students.fname', 'students.lname', 'students.email', 'courses.name as course_name')
         ->where('student_subject_exam.student_id', $student->id)
-        ->where('exams.course_id', $courseId)
+        ->where('student_subject_exam.exam_id', $examId)
         ->first();
     
         if (!$examDegree) {
