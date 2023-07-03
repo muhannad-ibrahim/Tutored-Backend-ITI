@@ -38,6 +38,8 @@ Route::get('/categories/count',[CategoryController::class,'getCount']);
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->where('id', '[0-9]+');
 // get courses of specific category
 Route::get('/categories/courses/{id}', [CategoryController::class, 'showCategoryCourses']);
+//get courses of a trainer
+Route::get('/trainer/courses/{id}',[TrainerController::class,'getCoursesByTrainerId']);
 
 // routes for student
 Route::get('/students',[StudentController::class, 'index']);

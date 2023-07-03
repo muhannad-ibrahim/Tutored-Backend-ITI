@@ -14,4 +14,3 @@ use App\Http\Controllers\TrainerController;
 
 Route::get('/course_content', [CourseContentController::class, 'index']);
 Route::get('/course_content/{id}', [CourseContentController::class, 'show']);
-Route::get('/trainer/courses/{id}',[TrainerController::class,'getCoursesByTrainerId']);
