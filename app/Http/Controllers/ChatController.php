@@ -40,11 +40,15 @@ class ChatController extends Controller
     {
         $student = Auth::guard('students')->user();
 
+        if (!$student) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $messages = Chat::where('student_id', $student->id)->get();
 
         return response()->json($messages);
     }
-    
+
 
 
 }
