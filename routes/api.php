@@ -68,6 +68,8 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
     //enroll
     Route::post('/student/storeCourse',[CourseController::class,'Enrollment']);
+
+    Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');
 });
 
 // routes for trainer
