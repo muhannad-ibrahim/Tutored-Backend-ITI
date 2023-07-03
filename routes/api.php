@@ -92,6 +92,10 @@ Route::middleware('checkTrainer:trainers')->group(function () {
     Route::post('/exams/{examId}/questions', [QuestionController::class, 'store']);
     Route::put('questions/{questionId}', [QuestionController::class, 'update']);
     Route::delete('questions/{questionId}', [QuestionController::class, 'destroy']);
+
+    // routes for zoom classes
+    Route::post('/zoom_classes', [ZoomClassesController::class, 'store']);
+    Route::delete('/zoom_classes/{id}', [ZoomClassesController::class, 'destroy']);
 });
 
 //get courses count
@@ -110,6 +114,7 @@ Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/courses/{courseId}/exams-with-questions', [ExamController::class, 'getAllCourseExamsWithQuestions']);
     Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
     Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
+    Route::get('/zoom_classes/{course_id}', [ZoomClassesController::class, 'index']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
@@ -121,11 +126,6 @@ Route::post('payment-intent', [PaymentController::class,'CreatePayIntent']);
 Route::post('store-intent', [PaymentController::class,'storeStripePayment']);
 Route::get('/courses/{course}/feedbacks', [FeedbackController::class, 'show']);
 
-
-// routes for zoom classes
-Route::get('/zoom_classes', [ZoomClassesController::class, 'index']);
-Route::post('/zoom_classes', [ZoomClassesController::class, 'store']);
-Route::delete('/zoom_classes/{id}', [ZoomClassesController::class, 'destroy']);
 
 // Verify email
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

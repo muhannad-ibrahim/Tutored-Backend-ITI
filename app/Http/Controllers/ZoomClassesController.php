@@ -11,9 +11,9 @@ class ZoomClassesController extends Controller
 {
     use ApiResponseTrait;
 
-    public function index()
+    public function index($course_id)
     {
-        $zoom_classes = zoom_class::get();
+        $zoom_classes = zoom_class::where('course_id', $course_id)->get();
         return $this->apiResponse($zoom_classes);
     }
 
