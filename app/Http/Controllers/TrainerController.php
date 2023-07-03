@@ -197,7 +197,7 @@ class TrainerController extends Controller
         }
 
         $credentials = request(['email', 'password']);
-        if (!$token = auth()->guard('trainers')->setTTL(28800)->attempt($credentials)) {
+        if (!$token = auth()->guard('trainers')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->respondWithToken($token);
@@ -229,7 +229,7 @@ class TrainerController extends Controller
             'role'=>'isTrainer',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->guard('trainers')->factory()->getTTL() * 120
+            'expires_in' => auth()->guard('trainers')->factory()->getTTL() * 1440
         ],200);
     }
 

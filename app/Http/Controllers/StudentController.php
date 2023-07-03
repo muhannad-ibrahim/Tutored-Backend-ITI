@@ -211,7 +211,7 @@ class StudentController extends Controller
             'role' => 'isStudent',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->guard('students')->factory()->getTTL() * 120,
+            'expires_in' => auth()->guard('students')->factory()->getTTL() * 1440,
             'id' => Auth::guard('students')->user()->id,
             'role' => 'isStudent',
 
