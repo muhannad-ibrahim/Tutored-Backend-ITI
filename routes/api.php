@@ -64,7 +64,6 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
     Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
     Route::get('/student/courses/{id}',[StudentController::class,'getCoursesByStudentId']);
-    Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
     //show courses by student id
     Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
     //enroll
@@ -110,6 +109,7 @@ Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/courses/{courseId}/exams', [ExamController::class, 'getAllCourseExams']);
     Route::get('/courses/{courseId}/exams-with-questions', [ExamController::class, 'getAllCourseExamsWithQuestions']);
     Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
+    Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
