@@ -63,7 +63,7 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::post('/courses/{courseId}/exams/{examId}/degree', [ExamController::class, 'storeExamDegree']);
     Route::put('/courses/{courseId}/progress', [CourseController::class, 'updateProgress']);
     Route::get('/courses/{course}/progress', [CourseController::class, 'getProgress']);
-    Route::post('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
+    Route::get('/courses/{course}/completion', [CourseController::class, 'completeCourse']);
     Route::get('/student/courses/{id}',[StudentController::class,'getCoursesByStudentId']);
     //show courses by student id
     Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
@@ -114,7 +114,6 @@ Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
     Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
     Route::get('/zoom_classes/{course_id}', [ZoomClassesController::class, 'index']);
-    Route::post('messages', [chatController::class, 'message']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
@@ -148,3 +147,5 @@ Route::post('/email/verify/resend', function (Request $request) {
 })->middleware(['throttle:6,1'])->name('verification.send');
 
 Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');
+
+Route::post('messages', [chatController::class, 'message']);
