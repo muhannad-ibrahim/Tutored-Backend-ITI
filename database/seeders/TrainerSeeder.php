@@ -17,11 +17,13 @@ class TrainerSeeder extends Seeder
      */
     public function run()
     {
+        $img = "blog.png";
         DB::table('trainers')->insert([
-            'fname' => 'mohammed',
-            'lname' => 'abdullah',
+            'fname' => 'Mohammed',
+            'lname' => 'Abdullah',
             'gender' => 'male',
             'phone' => 1355654685,
+            'img' => $img,
             'email' => 'mohammed@gmail.com',
             'password' => Hash::make('12345678'),
         ]);
