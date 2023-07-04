@@ -134,18 +134,23 @@ class CategoryController extends Controller
     {
         $courses = DB::table('categories')
             ->join('courses', 'categories.id', '=', 'courses.category_id')
+            ->leftJoin('trainers', 'trainers.id', '=', 'courses.trainer_id')
+            ->select('courses.*',
+                'categories.name as c_name',
+                'trainers.*',
+                'courses.img as c_img',
+                'courses.id as course_id',
+                DB::raw('(SELECT COUNT(student_id) FROM course_student WHERE course_id = courses.id) as student_count')
+            )
             ->where('categories.id', '=', $id)
-            ->join('trainers', 'trainers.id', '=', 'courses.trainer_id')
-            ->select( 'courses.*', 'categories.name as c_name', 'trainers.*', 'courses.img as c_img','courses.id as course_id')
             ->get();
-        if ($courses) {
-            return response()->json($courses, 200);
+
+        if ($courses->isEmpty()) {
+            return response()->json("No courses found in this category", 404);
         }
-        return response()->json("No courses found in this category", 404);
+
+        return response()->json($courses, 200);
     }
-
-
-
 
     public function validation($request)
     {
