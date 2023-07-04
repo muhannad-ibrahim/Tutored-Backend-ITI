@@ -108,28 +108,26 @@ class TrainerController extends Controller
         return $this->notFoundResponse();
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $validation=$this->apiValidation($request , [
-                'fname' => 'required|min:3|max:20',
-                'lname' => 'required|min:3|max:20',
-                'phone' => 'required|min:10',
-                'img' => 'image|mimes:jpeg,png',
-            ]);
-        if($validation instanceof Response){
+        $validation = $this->apiValidation($request, [
+            'img' => 'image|mimes:jpeg,png',
+        ]);
+
+        if ($validation instanceof Response) {
             return $validation;
         }
 
         $trainer = Trainer::find($id);
+
         if (!$trainer) {
             return $this->notFoundResponse();
         }
 
-        $img_name=$trainer->img;
-        if ($request->hasFile('img'))
-        {
-            if($img_name !== null)
-            {
+        $img_name = $trainer->img;
+
+        if ($request->hasFile('img')) {
+            if ($img_name !== null) {
                 $path_parts = pathinfo(basename($img_name));
 
                 Cloudinary::destroy($path_parts['filename']);
@@ -138,13 +136,13 @@ class TrainerController extends Controller
         }
 
         $trainer->update([
-            'fname'=>$request->fname ,
-            'lname'=>$request->lname ,
-            'phone'=>$request->phone ,
-            'img'=>$img_name,
-            'facebook'=>$request->facebook ,
-            'twitter'=>$request->twitter ,
-            'linkedin'=> $request->linkedin ,
+            'fname' => $request->input('fname', $trainer->fname),
+            'lname' => $request->input('lname', $trainer->lname),
+            'phone' => $request->input('phone', $trainer->phone),
+            'img' => $img_name,
+            'facebook' => $request->input('facebook', $trainer->facebook),
+            'twitter' => $request->input('twitter', $trainer->twitter),
+            'linkedin' => $request->input('linkedin', $trainer->linkedin),
         ]);
 
         if ($trainer) {

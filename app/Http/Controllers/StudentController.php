@@ -79,21 +79,21 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $validation = $this->apiValidation($request, [
-            'fname' => 'required|min:3|max:20',
-            'lname' => 'required|min:3|max:20',
-            'phone' => 'required|min:10',
             'img' => 'image|mimes:jpeg,png',
         ]);
+
         if ($validation instanceof Response) {
             return $validation;
         }
 
         $student = Student::find($id);
+
         if (!$student) {
             return $this->notFoundResponse();
         }
 
         $name = $student->img;
+
         if ($request->hasFile('img')) {
             if ($name !== null) {
                 $path_parts = pathinfo(basename($name));
@@ -103,9 +103,9 @@ class StudentController extends Controller
         }
 
         $student->update([
-            'fname' => $request->fname,
-            'lname' => $request->lname,
-            'phone' => $request->phone,
+            'fname' => $request->input('fname', $student->fname),
+            'lname' => $request->input('lname', $student->lname),
+            'phone' => $request->input('phone', $student->phone),
             'img' => $name,
         ]);
 
