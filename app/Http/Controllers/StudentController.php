@@ -152,7 +152,7 @@ class StudentController extends Controller
             'gender' => 'required|',
             'phone' => 'required|unique:students|min:10|max:15|regex:/^\+\d{1,3}\s?\d{3,14}$/',
             'email' => 'required|email|unique:students',
-            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%-_&]).*$/',
+            'password' => 'required|min:8|regex:/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{4,}$/',
         ]);
     }
 
