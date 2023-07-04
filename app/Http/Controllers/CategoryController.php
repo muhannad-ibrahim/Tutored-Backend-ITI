@@ -20,8 +20,11 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $Categorys = Category::with('courses')->get();
-        return $this->apiResponse($Categorys);
+        $categories = Category::with(['courses' => function ($query) {
+            $query->withCount('students');
+        }])->get();
+    
+        return $this->apiResponse($categories);
     }
 
     public function show($id)
