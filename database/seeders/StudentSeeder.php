@@ -18,11 +18,13 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
+        $img = "blog.png";
         DB::table('students')->insert([
             'fname' => 'Muhannad',
             'lname' => 'Ibrahim',
             'gender' => 'male',
             'phone' => 1234567892,        
+            'img' => $img,
             'email' => 'muhannad@gmail.com',
             'password' => Hash::make('12345678'),
             'created_at' => Carbon::now(),
