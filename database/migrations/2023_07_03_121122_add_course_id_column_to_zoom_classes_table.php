@@ -26,6 +26,7 @@ class AddCourseIdColumnToZoomClassesTable extends Migration
     public function down()
     {
         Schema::table('zoom_classes', function (Blueprint $table) {
+            $table->dropForeign(['course_id']);
             $table->dropColumn('course_id');
         });
     }
