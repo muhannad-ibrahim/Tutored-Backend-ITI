@@ -16,6 +16,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,8 +69,6 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
     //enroll
     Route::post('/student/storeCourse',[CourseController::class,'Enrollment']);
-
-    Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');
 });
 
 // routes for trainer
@@ -115,6 +114,7 @@ Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
     Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
     Route::get('/zoom_classes/{course_id}', [ZoomClassesController::class, 'index']);
+    Route::post('messages', [chatController::class, 'message']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
@@ -146,3 +146,5 @@ Route::post('/email/verify/resend', function (Request $request) {
         return response()->json(['message' => 'Verification link sent!'], 200);
     }
 })->middleware(['throttle:6,1'])->name('verification.send');
+
+Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');
