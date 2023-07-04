@@ -81,4 +81,9 @@ use App\Channels\PrivateChatChannel;
 //     return $user->isAdmin() && $user->id === $adminId || $user->isStudent() && $user->id === $studentId;
 // });
 Broadcast::channel('private-chat.{userId}.{studentId}', PrivateChatChannel::class);
-Broadcast::routes(['middleware' => ['auth:students']]);
+// Broadcast::routes(['middleware' => ['api']]);
+
+
+
+// Route::post('/broadcasting/auth', [BroadcastAuthController::class, 'authenticate']);
+

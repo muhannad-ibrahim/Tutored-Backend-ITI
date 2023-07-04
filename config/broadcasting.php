@@ -87,6 +87,12 @@ return [
                 'useTLS' => true
             ],
         ],
+        'channels' => [
+            'private-chat.{userId}.{studentId}' => [
+                'driver' => 'private',
+                'provider' => 'students',
+            ],
+        ],
 
         'ably' => [
             'driver' => 'ably',
