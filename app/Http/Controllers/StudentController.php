@@ -181,8 +181,10 @@ class StudentController extends Controller
 
     public function getCoursesByStudentId($id)
     {
-        $student = Student::with('courses')->find($id);
-    
+        $student = Student::with(['courses' => function ($query) {
+            $query->withCount('students');
+        }])->find($id);
+            
         if ($student) {
             $courses = $student->courses;
     
