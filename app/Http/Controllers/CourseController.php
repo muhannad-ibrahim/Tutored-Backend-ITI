@@ -23,11 +23,12 @@ class CourseController extends Controller
 
     public function index()
     {
-        //
-        $Courses = Course::with('category', 'trainer')->get();
-        return response()->json($Courses, 200);
-    }
+        $courses = Course::with('category', 'trainer')
+        ->withCount('students')
+        ->get();
 
+        return response()->json($courses, 200);
+    }
 
     public function show($id)
     {
@@ -185,7 +186,6 @@ class CourseController extends Controller
 
    public function studentCount($id)
     {
-
         $data = DB::table('course_student')->select('student_id')->where('course_id', '=', $id)->count('student_id');
 
         if ($data == 0)

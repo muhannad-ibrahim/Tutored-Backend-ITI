@@ -78,7 +78,7 @@
         <p class="completion-date">Completed on {{ $completion_date }}</p>
         <p class="message">We hereby acknowledge that you have successfully completed all the requirements and assessments of the course. Your dedication and hard work are commendable.</p>
         <p class="signature"> Signature:<br> The Tutored Team</p>
-        <p class="verification-number">Verification Number: <a href="{{ env('FRONT_URL') }}/main/student/certified/{{ $student_id }}/{{ $course_id }}/{{ $verification_number }}">{{ $verification_number }}</a></p>
+        <p class="verification-number">Verification Number: <a href="http://localhost:4200/main/student/certified/{{ $student_id }}/{{ $course_id }}/{{ $verification_number }}">{{ $verification_number }}</a></p>
     </div>
 </body>
 </html>
