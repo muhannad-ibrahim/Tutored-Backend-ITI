@@ -54,6 +54,7 @@ class StudentController extends Controller
             'gender' => $request->gender,
             'phone' => $request->phone,
             'email' => $request->email,
+            'img' => 'https://res.cloudinary.com/ddk98mjzn/image/upload/v1684273831/blank-profile-picture-973460_1280_edrkel.webp',
             'password' => Hash::make($request->password),
         ]);
 
