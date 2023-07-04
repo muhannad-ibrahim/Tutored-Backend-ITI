@@ -57,12 +57,23 @@ class TrainerController extends Controller
 
 
     public function getCoursesByTrainerId($id){
-        $courses = Trainer::with('courses')->find($id);
-        if ($courses)
-            return response()->json($courses, 200);
-        else return response()->json("No courses for this trainer");
-    }
+        $trainer = Trainer::find($id);
+
+        if ($trainer) {
+            $courses = $trainer->courses->map(function ($course) {
+                $course->student_count = $course->students->count();
+                unset($course->students);
+                return $course;
+            });
     
+            $trainer->courses = $courses;
+    
+            return response()->json($trainer, 200);
+        }
+    
+        return response()->json("No courses found for this trainer", 404);
+    }
+
 
     public function register(Request $request)
     {
