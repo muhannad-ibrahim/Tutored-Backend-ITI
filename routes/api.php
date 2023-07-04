@@ -68,8 +68,6 @@ Route::middleware('checkStudent:students')->group(function () {
     Route::get('/student/showCourses/{id}', [CourseController::class, 'showCourses']);
     //enroll
     Route::post('/student/storeCourse',[CourseController::class,'Enrollment']);
-
-    Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');
 });
 
 // routes for trainer
@@ -146,3 +144,5 @@ Route::post('/email/verify/resend', function (Request $request) {
         return response()->json(['message' => 'Verification link sent!'], 200);
     }
 })->middleware(['throttle:6,1'])->name('verification.send');
+
+Route::get('/verify/certificate/{studentId}/{courseId}/{verificationNumber}', [CertificateController::class,'verify'])->name('verify.certificate');

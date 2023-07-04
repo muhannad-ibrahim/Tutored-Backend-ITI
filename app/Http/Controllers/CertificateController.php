@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\Certificate;
 use Illuminate\Support\Facades\Redirect;
@@ -16,11 +18,26 @@ class CertificateController extends Controller
             ->first();
 
         if ($certificate) {
-            return redirect(env('FRONT_URL') . '/main/login/student');
-            // return response()->json(['message' => 'Verified'], 200);
+            $student = Student::find($studentId);
+            $course = Course::find($courseId);
+    
+            $message = [
+                'message' => 'Verified',
+                'student_name' => $student->fname . ' ' . $student->lname,
+                'course_name' => $course->name,
+                'verification_number' => $verificationNumber
+            ];
+    
+            return response()->json($message, 200);
         } else {
-            return redirect(env('FRONT_URL') . '/main/login/student');
-            // return response()->json(['message' => 'Unverified'], 200);
+            $message = [
+                'message' => 'Unverified',
+                'student_name' => null,
+                'course_name' => null,
+                'verification_number' => $verificationNumber
+            ];
+    
+            return response()->json($message, 200);
         }
     }
 }
