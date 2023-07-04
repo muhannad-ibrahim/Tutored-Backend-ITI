@@ -17,7 +17,7 @@ class Message implements ShouldBroadcast
         public $username;
         public $message;
     public function __construct($username,$message)
-    {        
+    {
         $this->message=$message;
         $this->username=$username;
     }

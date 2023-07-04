@@ -16,6 +16,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +114,7 @@ Route::middleware('studentOrTrainer:students,trainers')->group(function () {
     Route::get('/exams/{examId}/questions', [ExamController::class, 'getAllExamQuestions']);
     Route::get('/course_content/show/{c_id}', [CourseController::class, 'showvideo']);
     Route::get('/zoom_classes/{course_id}', [ZoomClassesController::class, 'index']);
+    Route::post('messages', [chatController::class, 'message']);
 });
 
 Route::post('/contact_us', [ContactUsController::class, 'store']);
